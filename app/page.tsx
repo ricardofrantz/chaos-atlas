@@ -3,27 +3,31 @@
 
 import React from 'react';
 import Link from 'next/link';
-import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
+import { ThemeSwitcher, NeonButton } from '@/components/themes';
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col" style={{
       background: `linear-gradient(135deg, var(--bg-primary), var(--bg-secondary))`
     }}>
-      <header className="p-6 border-b border-opacity-30" style={{
-        borderColor: 'var(--border-primary)',
-        backgroundColor: 'var(--bg-header)'
-      }}>
-        <div className="container mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold" style={{ color: 'var(--text-accent)' }}>
+      <header className="p-6 border-b border-cyan-500/20 bg-black/50 backdrop-blur-sm">
+        <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl font-bold neon-text-cyan mb-2">
               CML Visualizer
             </h1>
-            <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-lg text-gray-300">
               Explore chaos and complexity through interactive visualizations
             </p>
           </div>
-          <ThemeSwitcher />
+          <div className="flex items-center gap-4">
+            <Link href="/theme-demo">
+              <NeonButton variant="ghost" size="sm">
+                Theme Demo
+              </NeonButton>
+            </Link>
+            <ThemeSwitcher />
+          </div>
         </div>
       </header>
 
@@ -157,12 +161,14 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="p-6 border-t border-opacity-30" style={{
-        borderColor: 'var(--border-primary)',
-        backgroundColor: 'var(--bg-footer)'
-      }}>
-        <div className="container mx-auto text-center" style={{ color: 'var(--text-muted)' }}>
-          CML Visualizer - A futuristic exploration of chaos and complexity
+      <footer className="p-6 border-t border-cyan-500/20 bg-black/50 backdrop-blur-sm">
+        <div className="container mx-auto text-center">
+          <p className="text-gray-400 mb-2">
+            CML Visualizer - Tron Theme Edition
+          </p>
+          <p className="text-sm text-gray-500">
+            Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic
+          </p>
         </div>
       </footer>
     </div>

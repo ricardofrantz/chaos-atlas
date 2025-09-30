@@ -2,14 +2,14 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/ui/ThemeContext';
+import { ThemeProvider } from '@/components/themes';
 import MacOSCompatibility from '@/components/ui/MacOSCompatibility';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CML Visualizer - Explore Chaos and Complexity',
-  description: 'Interactive visualization of coupled map lattices and iterative maps',
+  title: 'CML Visualizer - Tron Theme Edition',
+  description: 'Interactive chaos theory visualizer with vintage Tron aesthetic, neon glow effects, and modern accessibility',
 };
 
 export default function RootLayout({

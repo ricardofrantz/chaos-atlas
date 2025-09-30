@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tron Theme CSS Import */
+@import '../styles/themes/tron.css';
+@import '../styles/animations/glow-effects.css';
+
 :root {
   /* Theme variables will be set by ThemeContext */
   --bg-primary: #1a1a2e;
