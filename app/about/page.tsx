@@ -21,11 +21,6 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/theme-demo">
-              <NeonButton variant="ghost" size="sm">
-                Theme Demo
-              </NeonButton>
-            </Link>
             <ThemeSwitcher />
           </div>
         </div>
@@ -242,26 +237,10 @@ export default function AboutPage() {
                   Explore Visualizations
                 </NeonButton>
               </Link>
-              <Link href="/theme-demo">
-                <NeonButton variant="secondary">
-                  Theme Demo
-                </NeonButton>
-              </Link>
             </div>
           </section>
         </div>
       </main>
-
-      <footer className="p-6 border-t border-cyan-500/20 bg-black/50 backdrop-blur-sm">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-400 mb-2">
-            CML Visualizer - Tron Theme Edition
-          </p>
-          <p className="text-sm text-gray-500">
-            Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic • GitHub Pages Ready
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

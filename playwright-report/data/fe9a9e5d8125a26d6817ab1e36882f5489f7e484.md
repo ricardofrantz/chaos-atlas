@@ -1,0 +1,76 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - heading "CML Visualizer" [level=1] [ref=e6]
+          - paragraph [ref=e7]: Explore chaos and complexity through interactive visualizations
+        - generic [ref=e8]:
+          - link "CML Diffusive" [ref=e9] [cursor=pointer]:
+            - /url: /cml/diffusive/
+            - button "CML Diffusive" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11] [cursor=pointer]: CML Diffusive
+          - link "CML Global" [ref=e12] [cursor=pointer]:
+            - /url: /cml/global/
+            - button "CML Global" [ref=e13] [cursor=pointer]:
+              - generic [ref=e14] [cursor=pointer]: CML Global
+          - link "About" [ref=e15] [cursor=pointer]:
+            - /url: /about/
+            - button "About" [ref=e16] [cursor=pointer]:
+              - generic [ref=e17] [cursor=pointer]: About
+          - radiogroup "Theme selection" [ref=e18]:
+            - radio "Switch to Black & White theme" [ref=e19] [cursor=pointer]:
+              - generic [ref=e20] [cursor=pointer]: Black & White
+            - radio "Switch to Neon Vintage theme" [ref=e21] [cursor=pointer]:
+              - generic [ref=e22] [cursor=pointer]: Neon Vintage
+            - radio "Switch to Blue Tron theme" [ref=e23] [cursor=pointer]:
+              - generic [ref=e24] [cursor=pointer]: Blue Tron
+    - main [ref=e25]:
+      - generic [ref=e26]:
+        - link "Logistic Map The simplest chaotic system, demonstrating period doubling and chaos ∞ Bifurcation" [ref=e27] [cursor=pointer]:
+          - /url: /maps/logistic/
+          - generic [ref=e28] [cursor=pointer]:
+            - heading "Logistic Map" [level=2] [ref=e29] [cursor=pointer]
+            - paragraph [ref=e30] [cursor=pointer]: The simplest chaotic system, demonstrating period doubling and chaos
+            - generic [ref=e32] [cursor=pointer]: ∞
+            - generic [ref=e35] [cursor=pointer]: Bifurcation
+        - link "Hénon Map A classic 2D discrete dynamical system with a strange attractor ∞ Attractor" [ref=e36] [cursor=pointer]:
+          - /url: /maps/henon/
+          - generic [ref=e37] [cursor=pointer]:
+            - heading "Hénon Map" [level=2] [ref=e38] [cursor=pointer]
+            - paragraph [ref=e39] [cursor=pointer]: A classic 2D discrete dynamical system with a strange attractor
+            - generic [ref=e41] [cursor=pointer]: ∞
+            - generic [ref=e44] [cursor=pointer]: Attractor
+        - link "Standard Map Conservative system showing transition to chaos in Hamiltonian systems ⚡ Chaos" [ref=e45] [cursor=pointer]:
+          - /url: /maps/standard/
+          - generic [ref=e46] [cursor=pointer]:
+            - heading "Standard Map" [level=2] [ref=e47] [cursor=pointer]
+            - paragraph [ref=e48] [cursor=pointer]: Conservative system showing transition to chaos in Hamiltonian systems
+            - generic [ref=e50] [cursor=pointer]: ⚡
+            - generic [ref=e53] [cursor=pointer]: Chaos
+        - link "Diffusive CML Spatiotemporal chaos and pattern formation in coupled map lattices ∇ Interactive" [ref=e54] [cursor=pointer]:
+          - /url: /cml/diffusive/
+          - generic [ref=e55] [cursor=pointer]:
+            - heading "Diffusive CML" [level=2] [ref=e56] [cursor=pointer]
+            - paragraph [ref=e57] [cursor=pointer]: Spatiotemporal chaos and pattern formation in coupled map lattices
+            - generic [ref=e59] [cursor=pointer]: ∇
+            - generic [ref=e62] [cursor=pointer]: Interactive
+        - link "Global CML Synchronization phenomena in globally coupled systems ⟳ Coming Soon" [ref=e63] [cursor=pointer]:
+          - /url: /cml/global/
+          - generic [ref=e64] [cursor=pointer]:
+            - heading "Global CML" [level=2] [ref=e65] [cursor=pointer]
+            - paragraph [ref=e66] [cursor=pointer]: Synchronization phenomena in globally coupled systems
+            - generic [ref=e68] [cursor=pointer]: ⟳
+            - generic [ref=e71] [cursor=pointer]: Coming Soon
+        - link "About Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic ⓘ Documentation" [ref=e72] [cursor=pointer]:
+          - /url: /about/
+          - generic [ref=e73] [cursor=pointer]:
+            - heading "About" [level=2] [ref=e74] [cursor=pointer]
+            - paragraph [ref=e75] [cursor=pointer]: Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic
+            - generic [ref=e77] [cursor=pointer]: ⓘ
+            - generic [ref=e80] [cursor=pointer]: Documentation
+  - alert [ref=e81]
+```

@@ -21,23 +21,18 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/theme-demo">
-              <NeonButton variant="primary" size="sm">
-                Theme Demo
-              </NeonButton>
-            </Link>
             <Link href="/cml/diffusive">
-              <NeonButton variant="secondary" size="sm">
+              <NeonButton variant="primary" size="sm">
                 CML Diffusive
               </NeonButton>
             </Link>
             <Link href="/cml/global">
-              <NeonButton variant="tertiary" size="sm">
+              <NeonButton variant="secondary" size="sm">
                 CML Global
               </NeonButton>
             </Link>
             <Link href="/about">
-              <NeonButton variant="ghost" size="sm">
+              <NeonButton variant="tertiary" size="sm">
                 About
               </NeonButton>
             </Link>
@@ -163,17 +158,6 @@ export default function Home() {
           </Link>
         </div>
       </main>
-
-      <footer className="p-6 border-t border-cyan-500/20 bg-black/50 backdrop-blur-sm">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-400 mb-2">
-            CML Visualizer - Tron Theme Edition
-          </p>
-          <p className="text-sm text-gray-500">
-            Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

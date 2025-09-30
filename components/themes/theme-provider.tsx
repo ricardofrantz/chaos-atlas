@@ -30,7 +30,7 @@ export function useTheme(): ThemeContextType {
 export function ThemeProvider({
   children,
   themes: providedThemes,
-  defaultTheme = 'tron-dark',
+  defaultTheme = 'blue-tron',
   storageKey = 'cml-theme',
   enableSystem = true,
   disableTransitionOnChange = false,
