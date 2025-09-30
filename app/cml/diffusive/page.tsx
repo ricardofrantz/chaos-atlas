@@ -3,31 +3,88 @@
 import React from 'react';
 import CMLVisualization from '@/components/visualizations/CMLVisualization';
 import Link from 'next/link';
+import { NeonButton, ThemeSwitcher } from '@/components/themes';
 
 export default function DiffusiveCMLPage() {
   return (
-    <div className="min-h-screen" style={{
-      background: `linear-gradient(135deg, var(--bg-primary), var(--bg-secondary))`
-    }}>
-      <header className="p-6 border-b border-opacity-30" style={{
-        borderColor: 'var(--border-primary)',
-        backgroundColor: 'var(--bg-header)'
-      }}>
-        <div className="container mx-auto">
-          <Link href="/" className="text-sm mb-2 inline-block" style={{ color: 'var(--text-secondary)' }}>
-            ← Back to Home
-          </Link>
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--text-accent)' }}>
-            Coupled Map Lattice
-          </h1>
-          <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
-            Observe spatiotemporal chaos and pattern formation
-          </p>
+    <div className="min-h-screen" data-theme="tron-dark">
+      <header className="p-6 border-b border-cyan-500/20 bg-black/50 backdrop-blur-sm">
+        <div className="container mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex-1">
+            <Link href="/" className="text-sm mb-2 inline-block text-cyan-400 hover:text-cyan-300 transition-colors">
+              ← Back to Home
+            </Link>
+            <h1 className="text-3xl font-bold neon-text-cyan mb-2">
+              Coupled Map Lattice
+            </h1>
+            <p className="text-lg text-gray-300">
+              Observe spatiotemporal chaos and pattern formation
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/theme-demo">
+              <NeonButton variant="ghost" size="sm">
+                Theme Demo
+              </NeonButton>
+            </Link>
+            <ThemeSwitcher />
+          </div>
         </div>
       </header>
       <main className="container mx-auto p-6">
-        <CMLVisualization />
+        <div className="space-y-6">
+          <div className="p-6 rounded-lg border border-cyan-500/20 bg-black/30 backdrop-blur-sm">
+            <h2 className="text-xl font-semibold neon-text-cyan mb-4">Diffusive Coupling Visualization</h2>
+            <p className="text-gray-300 mb-6">
+              Explore how diffusive coupling creates complex spatiotemporal patterns in coupled map lattices.
+              Watch as chaos spreads and synchronizes across the network.
+            </p>
+            <div className="bg-black/50 rounded-lg p-4 border border-cyan-500/10">
+              <CMLVisualization />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-lg border border-cyan-500/20 bg-black/30 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold neon-text-orange mb-3">Pattern Formation</h3>
+              <p className="text-gray-300 mb-4">
+                Observe how local interactions create global patterns through diffusive coupling.
+                See chaos, spirals, and traveling waves emerge from simple rules.
+              </p>
+              <ul className="space-y-2 text-gray-400">
+                <li>• Turing patterns</li>
+                <li>• Spiral waves</li>
+                <li>• Chaotic synchronization</li>
+                <li>• Phase transitions</li>
+              </ul>
+            </div>
+
+            <div className="p-6 rounded-lg border border-cyan-500/20 bg-black/30 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold neon-text-magenta mb-3">Coupling Strength</h3>
+              <p className="text-gray-300 mb-4">
+                The diffusive coupling parameter controls how neighboring sites influence each other,
+                determining the balance between local chaos and global order.
+              </p>
+              <ul className="space-y-2 text-gray-400">
+                <li>• Weak coupling: Independent chaos</li>
+                <li>• Moderate coupling: Pattern formation</li>
+                <li>• Strong coupling: Synchronization</li>
+                <li>• Critical transitions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </main>
+      <footer className="p-6 border-t border-cyan-500/20 bg-black/50 backdrop-blur-sm">
+        <div className="container mx-auto text-center">
+          <p className="text-gray-400 mb-2">
+            CML Visualizer - Tron Theme Edition
+          </p>
+          <p className="text-sm text-gray-500">
+            Diffusive Coupled Map Lattice • Built with TDD • WCAG AA Compliant
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

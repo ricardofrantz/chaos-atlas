@@ -98,63 +98,57 @@ export default function Home() {
 
           {/* CML Diffusive Card */}
           <Link href="/cml/diffusive" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105" style={{
-              backgroundColor: 'var(--bg-card)',
-              borderColor: 'var(--border-primary)',
-              borderWidth: '1px'
-            }}>
-              <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-accent)' }}>
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
                 Diffusive CML
               </h2>
-              <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
-                Coupled Map Lattice with diffusive coupling, showing pattern formation.
+              <p className="mb-4 text-gray-300">
+                Spatiotemporal chaos and pattern formation in coupled map lattices
               </p>
-              <div className="h-40 rounded bg-opacity-20 flex items-center justify-center" style={{
-                backgroundColor: 'var(--bg-secondary)'
-              }}>
-                <span className="text-5xl">🌊</span>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <span className="text-5xl neon-text-orange">🌊</span>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Interactive</span>
               </div>
             </div>
           </Link>
 
           {/* CML Global Card */}
           <Link href="/cml/global" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105" style={{
-              backgroundColor: 'var(--bg-card)',
-              borderColor: 'var(--border-primary)',
-              borderWidth: '1px'
-            }}>
-              <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-accent)' }}>
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
                 Global CML
               </h2>
-              <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
-                Coupled Map Lattice with global coupling, showing synchronization.
+              <p className="mb-4 text-gray-300">
+                Synchronization phenomena in globally coupled systems
               </p>
-              <div className="h-40 rounded bg-opacity-20 flex items-center justify-center" style={{
-                backgroundColor: 'var(--bg-secondary)'
-              }}>
-                <span className="text-5xl">🔄</span>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <span className="text-5xl neon-text-magenta">🔄</span>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                <span className="text-xs text-cyan-400">Coming Soon</span>
               </div>
             </div>
           </Link>
 
           {/* About Card */}
           <Link href="/about" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105" style={{
-              backgroundColor: 'var(--bg-card)',
-              borderColor: 'var(--border-primary)',
-              borderWidth: '1px'
-            }}>
-              <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-accent)' }}>
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
                 About
               </h2>
-              <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>
-                Learn more about chaos theory, dynamical systems, and this application.
+              <p className="mb-4 text-gray-300">
+                Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic
               </p>
-              <div className="h-40 rounded bg-opacity-20 flex items-center justify-center" style={{
-                backgroundColor: 'var(--bg-secondary)'
-              }}>
-                <span className="text-5xl">ℹ️</span>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <span className="text-5xl neon-text-yellow">ℹ️</span>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Documentation</span>
               </div>
             </div>
           </Link>
