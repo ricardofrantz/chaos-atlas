@@ -121,10 +121,14 @@ export interface ThemeContextType {
 
 export type ThemeProviderProps = {
   children: React.ReactNode;
+  themes?: ThemeConfiguration[];
   defaultTheme?: string;
   storageKey?: string;
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
+  currentTheme?: string;
+  onThemeChange?: (theme: string) => void;
+  isLoading?: boolean;
 };
 
 export type ThemeSwitcherProps = {
@@ -134,9 +138,11 @@ export type ThemeSwitcherProps = {
   showCustomization?: boolean;
   compact?: boolean;
   position?: 'header' | 'sidebar' | 'floating';
+  isLoading?: boolean;
+  className?: string;
 };
 
-export type NeonButtonProps = {
+export type NeonButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'tertiary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
