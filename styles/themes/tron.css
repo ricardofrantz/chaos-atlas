@@ -1,0 +1,147 @@
+/* Tron Theme CSS Custom Properties */
+:root {
+  /* Background Colors */
+  --tron-bg: #000000;
+  --tron-bg-secondary: #0a0a0a;
+  --tron-bg-tertiary: #1a1a1a;
+
+  /* Neon Colors - Vintage Tron Palette */
+  --tron-cyan: #00ffff;
+  --tron-cyan-bright: #40ffff;
+  --tron-cyan-dim: #00cccc;
+
+  --tron-orange: #ff7f00;
+  --tron-orange-bright: #ff9f20;
+  --tron-orange-dim: #cc6600;
+
+  --tron-magenta: #ff00ff;
+  --tron-magenta-bright: #ff40ff;
+  --tron-magenta-dim: #cc00cc;
+
+  --tron-yellow: #ffff00;
+  --tron-yellow-bright: #ffff40;
+  --tron-yellow-dim: #cccc00;
+
+  /* Text Colors */
+  --tron-text-primary: #ffffff;
+  --tron-text-secondary: #cccccc;
+  --tron-text-muted: #888888;
+
+  /* Border Colors */
+  --tron-border: #333333;
+  --tron-border-light: #555555;
+  --tron-border-dark: #222222;
+
+  /* Glow Effects */
+  --tron-glow-cyan: 0 0 8px rgba(0, 255, 255, 0.8);
+  --tron-glow-orange: 0 0 8px rgba(255, 127, 0, 0.8);
+  --tron-glow-magenta: 0 0 8px rgba(255, 0, 255, 0.8);
+  --tron-glow-yellow: 0 0 8px rgba(255, 255, 0, 0.8);
+
+  /* Enhanced Glow for Hover States */
+  --tron-glow-cyan-hover: 0 0 16px rgba(0, 255, 255, 1);
+  --tron-glow-orange-hover: 0 0 16px rgba(255, 127, 0, 1);
+  --tron-glow-magenta-hover: 0 0 16px rgba(255, 0, 255, 1);
+  --tron-glow-yellow-hover: 0 0 16px rgba(255, 255, 0, 1);
+
+  /* Animation Durations */
+  --tron-transition-fast: 0.15s;
+  --tron-transition-normal: 0.3s;
+  --tron-transition-slow: 0.5s;
+
+  /* Easing Functions */
+  --tron-ease-out: ease-out;
+  --tron-ease-in-out: ease-in-out;
+  --tron-linear: linear;
+
+  /* Spacing */
+  --tron-spacing-xs: 0.25rem;
+  --tron-spacing-sm: 0.5rem;
+  --tron-spacing-md: 1rem;
+  --tron-spacing-lg: 1.5rem;
+  --tron-spacing-xl: 2rem;
+
+  /* Border Radius */
+  --tron-radius-sm: 0.25rem;
+  --tron-radius-md: 0.5rem;
+  --tron-radius-lg: 0.75rem;
+  --tron-radius-xl: 1rem;
+
+  /* Shadows */
+  --tron-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --tron-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --tron-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+
+  /* Accessibility Overrides */
+  --tron-high-contrast-filter: contrast(1.2);
+  --tron-reduced-motion: none;
+}
+
+/* High Contrast Mode Override */
+@media (prefers-contrast: high) {
+  :root {
+    --tron-glow-cyan: 0 0 12px rgba(0, 255, 255, 1);
+    --tron-glow-orange: 0 0 12px rgba(255, 127, 0, 1);
+    --tron-glow-magenta: 0 0 12px rgba(255, 0, 255, 1);
+    --tron-glow-yellow: 0 0 12px rgba(255, 255, 0, 1);
+
+    --tron-border: #666666;
+    --tron-border-light: #888888;
+    --tron-border-dark: #444444;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tron-reduced-motion: none;
+    --tron-transition-fast: 0s;
+    --tron-transition-normal: 0s;
+    --tron-transition-slow: 0s;
+  }
+}
+
+/* Theme Class Application */
+.tron-theme {
+  background-color: var(--tron-bg);
+  color: var(--tron-text-primary);
+  transition: color var(--tron-transition-normal) var(--tron-ease-out);
+}
+
+/* Base element styling in Tron theme */
+.tron-theme h1,
+.tron-theme h2,
+.tron-theme h3,
+.tron-theme h4,
+.tron-theme h5,
+.tron-theme h6 {
+  color: var(--tron-text-primary);
+  text-shadow: var(--tron-glow-cyan);
+}
+
+.tron-theme p {
+  color: var(--tron-text-secondary);
+}
+
+.tron-theme a {
+  color: var(--tron-cyan);
+  text-shadow: var(--tron-glow-cyan);
+  transition: all var(--tron-transition-fast) var(--tron-ease-out);
+}
+
+.tron-theme a:hover {
+  color: var(--tron-cyan-bright);
+  text-shadow: var(--tron-glow-cyan-hover);
+}
+
+/* Focus states for accessibility */
+.tron-theme *:focus {
+  outline: 2px solid var(--tron-cyan);
+  outline-offset: 2px;
+  box-shadow: var(--tron-glow-cyan);
+}
+
+/* Dark theme base styles */
+[data-theme="tron"] {
+  color-scheme: dark;
+}
