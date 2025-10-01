@@ -126,14 +126,26 @@ const ComparativeAnalysis: React.FC = () => {
     selectedMaps.forEach(mapId => {
       const map = COMPARISON_MAPS.find(m => m.id === mapId);
       if (map) {
-        // For synchronized parameters, modify the default parameters
-        const params = { ...map.defaultParams };
-        if (syncParams && sharedParam in map.paramRanges) {
-          // Use a common parameter value for comparison
-          params[sharedParam] = 1.5; // Mid-range value
-        }
+        try {
+          // For synchronized parameters, modify the default parameters
+          const params = { ...map.defaultParams };
+          if (syncParams && sharedParam in map.paramRanges) {
+            // Use a common parameter value for comparison
+            params[sharedParam] = 1.5; // Mid-range value
+          }
 
-        data[mapId] = map.calculate(params, iterations);
+          const result = map.calculate(params, iterations);
+          // Validate the result
+          if (Array.isArray(result) && result.length > 0) {
+            data[mapId] = result;
+          } else {
+            console.warn(`Invalid result for ${map.name}:`, result);
+            data[mapId] = [];
+          }
+        } catch (error) {
+          console.error(`Error calculating ${map.name}:`, error);
+          data[mapId] = [];
+        }
       }
     });
 
@@ -160,7 +172,12 @@ const ComparativeAnalysis: React.FC = () => {
                     <g>
                       {/* Time series line */}
                       <path
-                        d={`M ${data.map((d, i) => `${i * 100 / data.length},${256 - (d.x || d.y || d) * 200}`).join(' L ')}`}
+                        d={`M ${data.map((d, i) => {
+                          const value = d.x !== undefined ? d.x : (d.y !== undefined ? d.y : d);
+                          const safeValue = isNaN(value) || value === null || value === undefined ? 0 : value;
+                          const clampedValue = Math.max(-2, Math.min(2, safeValue)); // Clamp to reasonable range
+                          return `${i * 100 / data.length},${256 - clampedValue * 100}`;
+                        }).join(' L ')}`}
                         fill="none"
                         stroke="#00ffff"
                         strokeWidth="1"
@@ -202,7 +219,11 @@ const ComparativeAnalysis: React.FC = () => {
                     <g>
                       {/* Phase space trajectory */}
                       <path
-                        d={`M ${data.map(d => `${(d.x + 2) * 100},${(d.y + 2) * 100}`).join(' L ')}`}
+                        d={`M ${data.map(d => {
+                          const safeX = isNaN(d.x) || d.x === null || d.x === undefined ? 0 : Math.max(-2, Math.min(2, d.x));
+                          const safeY = isNaN(d.y) || d.y === null || d.y === undefined ? 0 : Math.max(-2, Math.min(2, d.y));
+                          return `${(safeX + 2) * 100},${(safeY + 2) * 100}`;
+                        }).join(' L ')}`}
                         fill="none"
                         stroke="#00ffff"
                         strokeWidth="0.5"
@@ -251,6 +272,7 @@ const ComparativeAnalysis: React.FC = () => {
                 {COMPARISON_MAPS.map(map => (
                   <label key={map.id} className="flex items-center">
                     <input
+                      id={`map-${map.id}`}
                       type="checkbox"
                       checked={selectedMaps.includes(map.id)}
                       onChange={(e) => {
@@ -276,6 +298,7 @@ const ComparativeAnalysis: React.FC = () => {
                 Comparison Mode
               </label>
               <select
+                name="comparison-mode"
                 value={comparisonMode}
                 onChange={(e) => setComparisonMode(e.target.value as ComparisonMode)}
                 className="w-full bg-black/50 border border-cyan-500/30 rounded px-3 py-2 text-white"
@@ -293,6 +316,7 @@ const ComparativeAnalysis: React.FC = () => {
                 Iterations: {iterations}
               </label>
               <input
+                name="iterations"
                 type="range"
                 min="100"
                 max="5000"
@@ -306,6 +330,7 @@ const ComparativeAnalysis: React.FC = () => {
             <div>
               <label className="block text-sm font-medium mb-2 text-cyan-400">
                 <input
+                  name="sync-params"
                   type="checkbox"
                   checked={syncParams}
                   onChange={(e) => setSyncParams(e.target.checked)}
@@ -315,6 +340,7 @@ const ComparativeAnalysis: React.FC = () => {
               </label>
               {syncParams && (
                 <select
+                  name="shared-param"
                   value={sharedParam}
                   onChange={(e) => setSharedParam(e.target.value)}
                   className="w-full bg-black/50 border border-cyan-500/30 rounded px-3 py-2 text-white text-sm"
@@ -333,6 +359,7 @@ const ComparativeAnalysis: React.FC = () => {
               {selectedMaps.length} maps selected • {comparisonMode} comparison • {iterations} iterations
             </p>
             <button
+              id="recalculate-btn"
               onClick={calculateComparisonData}
               className="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-lg transition-colors"
             >
