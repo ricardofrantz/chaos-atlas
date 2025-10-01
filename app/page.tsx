@@ -43,6 +43,82 @@ export default function Home() {
 
       <main className="flex-grow container mx-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Tent Map Card */}
+          <Link href="/maps/tent" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Tent Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Piecewise linear chaos with exact analytical solutions and symbolic dynamics
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">▲</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Symbolic</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Arnold Cat Map Card */}
+          <Link href="/maps/arnold" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Arnold Cat Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Area-preserving transformation with periodic orbits and Fibonacci connections
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">◈</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Periodic</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Baker's Map Card */}
+          <Link href="/maps/bakers" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Baker's Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Stretching and folding dynamics demonstrating exact mixing and symbolic dynamics
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">◧</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Mixing</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Complex Quadratic Map Card */}
+          <Link href="/maps/complex" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Complex Quadratic
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Julia sets and Mandelbrot set exploring complex dynamics and fractals
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">◈</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Fractals</span>
+              </div>
+            </div>
+          </Link>
+
           {/* Logistic Map Card */}
           <Link href="/maps/logistic" className="block">
             <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
