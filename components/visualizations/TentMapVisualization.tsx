@@ -211,7 +211,7 @@ const TentMapVisualization: React.FC = () => {
                             innerWidth: number, innerHeight: number,
                             xScale: d3.ScaleLinear<number, number>,
                             yScale: d3.ScaleLinear<number, number>) => {
-    const data = calculateTentBifcation(
+    const data = calculateTentBifurcation(
       { min: 0.5, max: 2.0 },
       0.01,
       0.4,
