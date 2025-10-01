@@ -176,6 +176,25 @@ export default function Home() {
             </div>
           </Link>
 
+          {/* Comparative Analysis Card */}
+          <Link href="/compare" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-purple-500/20 bg-black/30 backdrop-blur-sm hover:border-purple-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-purple">
+                Comparative Analysis
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Side-by-side comparison of different chaotic systems with synchronized parameters
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-purple-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-purple">⚖</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-purple-400">Interactive</span>
+              </div>
+            </div>
+          </Link>
+
           {/* Logistic Map Card */}
           <Link href="/maps/logistic" className="block">
             <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">

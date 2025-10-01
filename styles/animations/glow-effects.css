@@ -101,6 +101,14 @@
   text-shadow: var(--tron-glow-yellow-hover);
 }
 
+.neon-text-purple {
+  text-shadow: var(--tron-glow-magenta);
+}
+
+.neon-text-purple:hover {
+  text-shadow: var(--tron-glow-magenta-hover);
+}
+
 /* Pulse Animation */
 @keyframes neon-pulse {
   0%, 100% {
