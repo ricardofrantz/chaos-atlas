@@ -460,7 +460,7 @@ const DuffingMapVisualization: React.FC = () => {
       densityMap.set(key, (densityMap.get(key) || 0) + 1);
     });
 
-    const maxDensity = Math.max(...densityMap.values());
+    const maxDensity = Math.max(...Array.from(densityMap.values()));
     const colorScale = d3.scaleSequential(d3.interpolateViridis)
       .domain([0, maxDensity]);
 
