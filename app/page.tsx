@@ -100,6 +100,63 @@ export default function Home() {
             </div>
           </Link>
 
+          {/* Ikeda Map Card */}
+          <Link href="/maps/ikeda" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Ikeda Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Nonlinear optics model with stunning spiral attractors from laser cavity dynamics
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">◉</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Spiral</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Tinkerbell Map Card */}
+          <Link href="/maps/tinkerbell" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Tinkerbell Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Complex polynomial dynamics with multi-loop attractors and bistable behavior
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">✦</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Multi-loop</span>
+              </div>
+            </div>
+          </Link>
+
+          {/* Duffing Map Card */}
+          <Link href="/maps/duffing" className="block">
+            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
+              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
+                Duffing Map
+              </h2>
+              <p className="mb-4 text-gray-300">
+                Double-well oscillator demonstrating bistable dynamics and physical chaos
+              </p>
+              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
+                <div className="text-4xl neon-text-orange">⚛</div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span className="text-xs text-cyan-400">Bistable</span>
+              </div>
+            </div>
+          </Link>
+
           {/* Complex Quadratic Map Card */}
           <Link href="/maps/complex" className="block">
             <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
