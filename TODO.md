@@ -14,22 +14,22 @@ This document provides a comprehensive list of all features, implementations, an
   - [x] Time series computation
   - [x] Cobweb plot generation
   - [x] Bifurcation diagram
-  - [x] Lyapunov exponent calculation
+  - [ ] Lyapunov exponent calculation (NOT IMPLEMENTED)
   - [x] React visualization component
   - [x] Interactive parameter controls (r, x₀, iterations)
 
 - [x] **Hénon Map** (`lib/maps/henon.ts`)
   - [x] Basic 2D iteration calculation
   - [x] Attractor computation with transient removal
-  - [x] Lyapunov exponent calculation
+  - [ ] Lyapunov exponent calculation (NOT IMPLEMENTED)
   - [x] React visualization component
   - [x] Interactive parameter controls (a, b, x₀, y₀, iterations)
 
 - [x] **Standard Map (Chirikov-Taylor)** (`lib/maps/standard.ts`)
   - [x] Phase space computation
   - [x] Rotation number calculation
-  - [x] Lyapunov exponent calculation
-  - [x] Stability transition analysis
+  - [x] Lyapunov exponent calculation (PARTIAL - basic implementation)
+  - [ ] Stability transition analysis (NOT IMPLEMENTED)
   - [x] React visualization component
   - [x] Interactive parameter controls (K, initial conditions)
 
@@ -43,19 +43,20 @@ This document provides a comprehensive list of all features, implementations, an
 
 ### **User Interface and Navigation**
 - [x] Main page with navigation to all maps
-- [x] Theme system (Black & White, Neon Vintage, Blue Tron)
+- [x] Theme system (3 themes: Black & White, Neon Vintage, Blue Tron)
 - [x] Responsive design for mobile, tablet, desktop
 - [x] Interactive parameter sliders
 - [x] Real-time visualization updates
 - [x] About page with project information
+- [ ] Individual map pages (separate from visualizations)
 
 ### **Visualization Components**
 - [x] D3.js integration for 2D visualizations
-- [x] Three.js setup (installed, basic configuration)
+- [x] Three.js installed (basic configuration, not actively used)
 - [x] SVG-based line plots and scatter plots
 - [x] Heat map visualizations for CML
-- [x] Color-coded parameter spaces
-- [x] Interactive tooltips and information panels
+- [ ] Color-coded parameter spaces (NOT IMPLEMENTED)
+- [ ] Interactive tooltips and information panels (LIMITED)
 
 ### **Technical Infrastructure**
 - [x] TypeScript configuration
@@ -71,7 +72,7 @@ This document provides a comprehensive list of all features, implementations, an
 - [x] Local development server
 - [x] Production build configuration
 - [x] Static export configuration
-- [x] Performance optimizations
+- [ ] Performance optimizations (PARTIAL - not implemented)
 
 ---
 
@@ -143,7 +144,32 @@ This document provides a comprehensive list of all features, implementations, an
 
 ---
 
-## 🔧 **MEDIUM PRIORITY - Advanced Features (Phase 2)**
+## 🔧 **MEDIUM PRIORITY - Missing Core Features (Phase 1.5)**
+
+### **Essential Features That Should Already Be Working**
+- [ ] **Lyapunov Exponent Calculations**
+  - [ ] Logistic Map Lyapunov exponent (currently calculated but not displayed)
+  - [ ] Hénon Map Lyapunov exponent (not implemented in UI)
+  - [ ] CML Lyapunov spectrum (not implemented)
+  - [ ] Real-time Lyapunov exponent display
+
+- [ ] **Enhanced Visualizations**
+  - [ ] Better axis labels and grid lines for all plots
+  - [ ] Zoom functionality for complex visualizations
+  - [ ] Animation controls (play/pause/speed adjustment)
+  - [ ] Data export (CSV, PNG, JSON formats)
+
+- [ ] **Improved UI/UX**
+  - [ ] Individual pages for each map (separate from visualizations)
+  - [ ] Parameter presets for interesting chaotic behaviors
+  - [ ] Side-by-side comparison mode
+  - [ ] Parameter synchronization across maps
+
+- [ ] **Performance Improvements**
+  - [ ] Web Workers for heavy calculations (Lyapunov exponents, bifurcations)
+  - [ ] Caching of expensive calculations
+  - [ ] Optimized rendering with React.memo
+  - [ ] Progressive loading for large visualizations
 
 ### **Additional Chaotic Systems - Tier 2 Additions**
 - [ ] **Ikeda Map** (`lib/maps/ikeda.ts`)
@@ -308,16 +334,20 @@ This document provides a comprehensive list of all features, implementations, an
 
 ---
 
-## 🎯 **PRIORITY MATRIX**
+## 🎯 **REVISED PRIORITY MATRIX**
 
 | Feature Category | Priority | Effort | Impact | Timeline |
 |------------------|----------|---------|---------|----------|
-| Tier 1 Maps (Tent, Baker's, Arnold, Complex) | **HIGH** | Low-Medium | **HIGH** | 1-2 weeks |
-| Enhanced Visualization | **HIGH** | Medium | **HIGH** | 2-3 weeks |
-| Educational Features | **HIGH** | Medium | **HIGH** | 2-3 weeks |
+| **CRITICAL - Missing Core Features** | **CRITICAL** | Low-Medium | **CRITICAL** | 1-2 weeks |
+| Lyapunov Exponent Display | **CRITICAL** | Low | **CRITICAL** | 1 week |
+| Enhanced Visualizations (axes, zoom, animation) | **CRITICAL** | Medium | **HIGH** | 2 weeks |
+| Individual Map Pages | **HIGH** | Low | **HIGH** | 1 week |
+| Performance Optimizations | **HIGH** | Medium | **HIGH** | 2 weeks |
+| Tier 1 Maps (Tent, Baker's, Arnold, Complex) | **HIGH** | Medium | **HIGH** | 2-3 weeks |
+| Educational Features (presets, comparison) | **HIGH** | Medium | **HIGH** | 2-3 weeks |
 | Tier 2 Maps (Ikeda, Tinkerbell, Duffing) | **MEDIUM** | Medium | **MEDIUM** | 3-4 weeks |
-| 3D Visualization Framework | **MEDIUM** | High | **MEDIUM** | 4-5 weeks |
-| Research-Grade Features | **LOW** | High | **MEDIUM** | 6-8 weeks |
+| 3D Visualization Framework | **LOW** | High | **MEDIUM** | 4-5 weeks |
+| Research-Grade Features | **LOW** | High | **LOW** | 6-8 weeks |
 | VR/AR Support | **LOW** | Very High | **LOW** | 8-12 weeks |
 
 ---
