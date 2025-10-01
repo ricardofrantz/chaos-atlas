@@ -18,7 +18,7 @@ export default function BakersMapPage() {
             ← Back to Home
           </Link>
           <h1 className="text-3xl font-bold" style={{ color: 'var(--text-accent)' }}>
-            Baker's Map
+            Baker&apos;s Map
           </h1>
           <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
             Demonstrating stretching, folding, and mixing mechanisms in chaotic dynamics

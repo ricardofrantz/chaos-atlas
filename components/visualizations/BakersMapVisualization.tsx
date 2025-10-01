@@ -316,13 +316,13 @@ const BakersMapVisualization: React.FC = () => {
 
   const getVisualizationTitle = () => {
     switch (visualizationType) {
-      case 'trajectory': return 'Baker\'s Map Trajectory';
+      case 'trajectory': return 'Baker&apos;s Map Trajectory';
       case 'mixing': return 'Mixing Behavior';
       case 'scrambling': return 'Image Scrambling';
       case 'invariant': return 'Invariant Measure';
       case 'partition': return 'Phase Space Partition';
       case 'symbolic': return 'Symbolic Dynamics';
-      default: return 'Baker\'s Map Visualization';
+      default: return 'Baker&apos;s Map Visualization';
     }
   };
 
@@ -335,7 +335,7 @@ const BakersMapVisualization: React.FC = () => {
 
   return (
     <div className="p-6 rounded-lg border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm">
-      <h3 className="text-2xl font-bold mb-4 neon-text-cyan">Baker's Map Visualization</h3>
+      <h3 className="text-2xl font-bold mb-4 neon-text-cyan">Baker&apos;s Map Visualization</h3>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Controls */}

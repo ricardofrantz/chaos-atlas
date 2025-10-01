@@ -85,7 +85,7 @@ export default function Home() {
           <Link href="/maps/bakers" className="block">
             <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
               <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Baker's Map
+                Baker&apos;s Map
               </h2>
               <p className="mb-4 text-gray-300">
                 Stretching and folding dynamics demonstrating exact mixing and symbolic dynamics

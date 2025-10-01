@@ -628,10 +628,10 @@ const TinkerbellMapVisualization: React.FC = () => {
           <div className="p-3 bg-gray-800/50 rounded-lg border border-cyan-500/20">
             <p className="text-sm font-medium text-cyan-400 mb-1">Equations:</p>
             <p className="text-xs text-gray-300 font-mono">
-              x' = x² - y² + a·x + b·y
+              x&apos; = x² - y² + a·x + b·y
             </p>
             <p className="text-xs text-gray-300 font-mono">
-              y' = 2·x·y + c·x + d·y
+              y&apos; = 2·x·y + c·x + d·y
             </p>
           </div>
         </div>

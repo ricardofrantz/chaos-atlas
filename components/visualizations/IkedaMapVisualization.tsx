@@ -533,10 +533,10 @@ const IkedaMapVisualization: React.FC = () => {
               t = c - d/(1 + x² + y²)
             </p>
             <p className="text-xs text-gray-300 font-mono">
-              x' = 1 + a·(x·cos(t) - y·sin(t))
+              x&apos; = 1 + a·(x·cos(t) - y·sin(t))
             </p>
             <p className="text-xs text-gray-300 font-mono">
-              y' = b·(x·sin(t) + y·cos(t))
+              y&apos; = b·(x·sin(t) + y·cos(t))
             </p>
           </div>
         </div>

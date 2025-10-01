@@ -651,10 +651,10 @@ const DuffingMapVisualization: React.FC = () => {
           <div className="p-3 bg-gray-800/50 rounded-lg border border-cyan-500/20">
             <p className="text-sm font-medium text-cyan-400 mb-1">Equations:</p>
             <p className="text-xs text-gray-300 font-mono">
-              x' = y
+              x&apos; = y
             </p>
             <p className="text-xs text-gray-300 font-mono">
-              y' = -b·y + a·x - x³
+              y&apos; = -b·y + a·x - x³
             </p>
             <p className="text-xs text-gray-400 mt-1">
               Potential: V(x) = -0.5·a·x² + 0.25·x⁴
