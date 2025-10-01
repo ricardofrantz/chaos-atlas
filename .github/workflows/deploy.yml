@@ -102,9 +102,7 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1 # Disable telemetry for faster builds
           NODE_ENV: production
 
-      - name: Static HTML export (if needed)
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: ${{ steps.detect-package-manager.outputs.runner }} next export
+      # Note: Static export happens automatically with output: 'export' in next.config.js
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
