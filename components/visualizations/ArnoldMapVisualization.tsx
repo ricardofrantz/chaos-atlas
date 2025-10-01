@@ -10,7 +10,8 @@ import {
   calculateArnoldEigenvalues,
   calculateArnoldMatrixProperties,
   calculateArnoldFibonacciRelation,
-  calculateArnoldAreaPreservation
+  calculateArnoldAreaPreservation,
+  calculateArnoldIteration
 } from '@/lib/maps/arnold';
 
 const ArnoldMapVisualization: React.FC = () => {
