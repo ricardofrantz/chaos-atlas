@@ -2,34 +2,29 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { InteractiveSVG } from './InteractiveSVG';
-import { usePlotTransform } from '@/hooks/usePlotTransform';
-import { DataThemeSwitcher } from '@/components/themes/DataThemeSwitcher';
-import { ExportControls } from '@/components/ui/ExportControls';
-import { getDataTheme, DataTheme } from '@/lib/themes/data-themes';
-import { PlotMetadata } from '@/lib/export/plot-export';
 
 const LogisticMapVisualization: React.FC = () => {
   const [r, setR] = useState(3.5);
   const [x0, setX0] = useState(0.5);
   const [iterations, setIterations] = useState(50);
   const [visualizationType, setVisualizationType] = useState('cobweb');
-  const [currentTheme, setCurrentTheme] = useState<DataTheme>(getDataTheme('matplotlib'));
-  const [showExport, setShowExport] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   const svgRef = useRef<SVGSVGElement>(null);
-  const interactiveSvgRef = useRef<SVGSVGElement>(null);
 
   const width = 800;
   const height = 600;
+  // Simple theme system
+  const themes = {
+    matplotlib: { primary: '#1f77b4', secondary: '#ff7f0e', tertiary: '#2ca02c', background: '#ffffff', grid: '#e0e0e0', text: '#333333', axis: '#666666' },
+    seaborn: { primary: '#4c72b0', secondary: '#dd8452', tertiary: '#55a868', background: '#fafafa', grid: '#e8e8e8', text: '#2c2c2c', axis: '#7f7f7f' },
+    neon: { primary: '#00ffff', secondary: '#ff00ff', tertiary: '#ffff00', background: '#0a0a0a', grid: '#1a1a1a', text: '#ffffff', axis: '#666666' },
+    scientific: { primary: '#0d47a1', secondary: '#c62828', tertiary: '#2e7d32', background: '#ffffff', grid: '#f5f5f5', text: '#212121', axis: '#616161' }
+  };
 
-  const plotTransform = usePlotTransform({
-    width,
-    height,
-    bounds: { minX: 0, maxX: 1, minY: 0, maxY: 1 },
-    enableConstraints: true,
-  });
-  
+  const [currentTheme, setCurrentTheme] = useState('matplotlib');
+  const theme = themes[currentTheme as keyof typeof themes];
+
   useEffect(() => {
     if (!svgRef.current) return;
 
@@ -52,7 +47,7 @@ const LogisticMapVisualization: React.FC = () => {
     mainGroup.append('rect')
       .attr('width', innerWidth)
       .attr('height', innerHeight)
-      .attr('fill', currentTheme.colors.background)
+      .attr('fill', theme.background)
       .attr('rx', 5)
       .attr('data-background', 'true');
     
@@ -94,7 +89,7 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('y1', 0)
       .attr('x2', d => xScale(d))
       .attr('y2', innerHeight)
-      .attr('stroke', currentTheme.colors.grid)
+      .attr('stroke', theme.grid)
       .attr('stroke-width', 1)
       .attr('stroke-dasharray', '2,2');
 
@@ -109,7 +104,7 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('y1', d => yScale(d))
       .attr('x2', innerWidth)
       .attr('y2', d => yScale(d))
-      .attr('stroke', currentTheme.colors.grid)
+      .attr('stroke', theme.grid)
       .attr('stroke-width', 1)
       .attr('stroke-dasharray', '2,2');
 
@@ -119,13 +114,13 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale))
       .selectAll('text, line, path')
-      .style('color', currentTheme.colors.axis);
+      .style('color', theme.axis);
 
     mainGroup.append('g')
       .attr('data-axis', 'y')
       .call(d3.axisLeft(yScale))
       .selectAll('text, line, path')
-      .style('color', currentTheme.colors.axis);
+      .style('color', theme.axis);
     
     // Add axis labels
     const xLabel = visualizationType === 'time' ? 'Iteration' :
@@ -136,7 +131,7 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 45)
       .attr('text-anchor', 'middle')
-      .style('fill', currentTheme.colors.text)
+      .style('fill', theme.text)
       .style('font-size', '14px')
       .text(xLabel);
 
@@ -146,7 +141,7 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('x', -innerHeight / 2)
       .attr('y', -40)
       .attr('text-anchor', 'middle')
-      .style('fill', currentTheme.colors.text)
+      .style('fill', theme.text)
       .style('font-size', '14px')
       .text(visualizationType === 'bifurcation' ? 'x' : 'f(x)');
 
@@ -156,7 +151,7 @@ const LogisticMapVisualization: React.FC = () => {
       .attr('x', innerWidth / 2)
       .attr('y', -15)
       .attr('text-anchor', 'middle')
-      .style('fill', currentTheme.colors.primary)
+      .style('fill', theme.primary)
       .style('font-weight', 'bold')
       .style('font-size', '18px')
       .text(`Logistic Map (r = ${r.toFixed(2)})`);
@@ -181,7 +176,7 @@ const LogisticMapVisualization: React.FC = () => {
       g.append('path')
         .datum(points)
         .attr('fill', 'none')
-        .attr('stroke', currentTheme.colors.primary)
+        .attr('stroke', theme.primary)
         .attr('stroke-width', 2)
         .attr('d', curve);
 
@@ -191,7 +186,7 @@ const LogisticMapVisualization: React.FC = () => {
         .attr('y1', yScale(0))
         .attr('x2', xScale(1))
         .attr('y2', yScale(1))
-        .attr('stroke', currentTheme.colors.secondary)
+        .attr('stroke', theme.secondary)
         .attr('stroke-width', 1)
         .attr('stroke-dasharray', '5,5');
       
@@ -213,7 +208,7 @@ const LogisticMapVisualization: React.FC = () => {
           .attr('y1', yScale(cobwebPoints[i].y))
           .attr('x2', xScale(cobwebPoints[i].y))
           .attr('y2', yScale(cobwebPoints[i].y))
-          .attr('stroke', currentTheme.colors.tertiary)
+          .attr('stroke', theme.tertiary)
           .attr('stroke-width', 1.5);
 
         // Horizontal line
@@ -223,7 +218,7 @@ const LogisticMapVisualization: React.FC = () => {
             .attr('y1', yScale(cobwebPoints[i].y))
             .attr('x2', xScale(cobwebPoints[i].y))
             .attr('y2', yScale(cobwebPoints[i + 1] ? logistic(cobwebPoints[i].y) : cobwebPoints[i].y))
-            .attr('stroke', currentTheme.colors.tertiary)
+            .attr('stroke', theme.tertiary)
             .attr('stroke-width', 1.5);
         }
       }
@@ -257,7 +252,7 @@ const LogisticMapVisualization: React.FC = () => {
       g.append('path')
         .datum(timeSeriesPoints)
         .attr('fill', 'none')
-        .attr('stroke', currentTheme.colors.primary)
+        .attr('stroke', theme.primary)
         .attr('stroke-width', 2)
         .attr('d', line);
 
@@ -270,7 +265,7 @@ const LogisticMapVisualization: React.FC = () => {
         .attr('cx', d => xScale(d.i))
         .attr('cy', d => yScale(d.x))
         .attr('r', 2)
-        .attr('fill', currentTheme.colors.data[0]);
+        .attr('fill', theme.primary);
     }
     
     function renderBifurcation(
@@ -312,7 +307,7 @@ const LogisticMapVisualization: React.FC = () => {
         .attr('cx', d => xScale(d.r))
         .attr('cy', d => yScale(d.x))
         .attr('r', 0.5)
-        .attr('fill', currentTheme.colors.data[0])
+        .attr('fill', theme.primary)
         .attr('opacity', 0.7);
 
       // Add current r value line
@@ -321,24 +316,12 @@ const LogisticMapVisualization: React.FC = () => {
         .attr('y1', 0)
         .attr('x2', xScale(r))
         .attr('y2', height)
-        .attr('stroke', currentTheme.colors.secondary)
+        .attr('stroke', theme.secondary)
         .attr('stroke-width', 2)
         .attr('stroke-dasharray', '5,5');
     }
     
-  }, [r, x0, iterations, visualizationType, currentTheme, plotTransform]);
-  
-  // Create metadata for export
-  const createMetadata = (): PlotMetadata => ({
-    title: `Logistic Map - ${visualizationType.charAt(0).toUpperCase() + visualizationType.slice(1)}`,
-    subtitle: `r = ${r.toFixed(3)}, x₀ = ${x0.toFixed(3)}, ${iterations} iterations`,
-    mapType: 'Logistic Map',
-    parameters: { r, x0, iterations },
-    theme: currentTheme.name,
-    timestamp: new Date(),
-    iterations,
-    bounds: { minX: 0, maxX: 1, minY: 0, maxY: 1 },
-  });
+  }, [r, x0, iterations, visualizationType, theme]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
@@ -347,12 +330,18 @@ const LogisticMapVisualization: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold neon-text-cyan">Logistic Map Visualization</h1>
           <div className="flex items-center gap-4">
-            <DataThemeSwitcher
-              currentThemeId={currentTheme.id}
-              onThemeChange={setCurrentTheme}
-            />
+            <select
+              value={currentTheme}
+              onChange={(e) => setCurrentTheme(e.target.value)}
+              className="bg-black/70 border border-cyan-500/30 rounded px-4 py-2 text-white"
+            >
+              <option value="matplotlib">Matplotlib</option>
+              <option value="seaborn">Seaborn</option>
+              <option value="neon">Neon</option>
+              <option value="scientific">Scientific</option>
+            </select>
             <button
-              onClick={() => setShowExport(!showExport)}
+              onClick={() => alert('Export functionality coming soon!')}
               className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -432,57 +421,39 @@ const LogisticMapVisualization: React.FC = () => {
               {/* Quick Actions */}
               <div className="space-y-2">
                 <button
-                  onClick={plotTransform.reset}
+                  onClick={() => setZoomLevel(1)}
                   className="w-full bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded transition-colors text-sm"
                 >
                   Reset View
                 </button>
                 <button
-                  onClick={() => plotTransform.fitToData()}
+                  onClick={() => alert('Pan and zoom coming soon!')}
                   className="w-full bg-gray-600 hover:bg-gray-500 text-white px-3 py-2 rounded transition-colors text-sm"
                 >
-                  Fit to Data
+                  Pan & Zoom
                 </button>
               </div>
             </div>
-
-            {/* Export Panel */}
-            {showExport && (
-              <div className="mt-6">
-                <ExportControls
-                  svgElement={interactiveSvgRef.current}
-                  metadata={createMetadata()}
-                  currentTheme={currentTheme}
-                  data={[]} // TODO: Add actual data extraction
-                />
-              </div>
-            )}
           </div>
 
           {/* Visualization */}
           <div className="lg:col-span-3">
             <div className="bg-black/40 border border-cyan-500/20 rounded-lg p-6">
               <div className="flex justify-center">
-                <InteractiveSVG
-                  svgRef={interactiveSvgRef}
-                  width={width}
-                  height={height}
-                  onTransformChange={plotTransform.updateTransform}
-                  className="border border-cyan-500/20 rounded"
-                >
+                <div className="border border-cyan-500/20 rounded">
                   <svg
                     ref={svgRef}
-                    width={width}
-                    height={height}
+                    width={width * zoomLevel}
+                    height={height * zoomLevel}
                     style={{ overflow: 'visible' }}
                   />
-                </InteractiveSVG>
+                </div>
               </div>
 
               {/* Visualization Info */}
               <div className="mt-4 text-center text-sm text-gray-400">
-                <p>Interactive Controls: Click and drag to pan • Scroll to zoom • Use controls panel to adjust parameters</p>
-                <p className="mt-1">Current Theme: {currentTheme.name} • Zoom: {Math.round(plotTransform.currentScale * 100)}%</p>
+                <p>Interactive Controls: Adjust parameters using controls panel • Themes change colors</p>
+                <p className="mt-1">Current Theme: {currentTheme} • Zoom: {Math.round(zoomLevel * 100)}%</p>
               </div>
             </div>
           </div>
