@@ -12,7 +12,7 @@ import { calculateStandardMap } from '@/lib/maps/standard';
 import { calculateTentMap } from '@/lib/maps/tent';
 import { calculateBakersMap } from '@/lib/maps/bakers';
 import { calculateArnoldMap } from '@/lib/maps/arnold';
-import { calculateComplexMap } from '@/lib/maps/complex';
+import { calculateComplexQuadraticMap } from '@/lib/maps/complexQuadratic';
 import { calculateIkedaMap } from '@/lib/maps/ikeda';
 import { calculateTinkerbellMap } from '@/lib/maps/tinkerbell';
 import { calculateDuffingMap } from '@/lib/maps/duffing';
