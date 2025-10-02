@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useCallback, useEffect, MouseEvent, WheelEvent } from 'react';
+import React, { useRef, useState, useCallback, useEffect, useImperativeHandle, MouseEvent, WheelEvent } from 'react';
 
 interface ViewTransform {
   x: number;
@@ -18,9 +18,10 @@ interface InteractiveSVGProps {
   maxScale?: number;
   enablePan?: boolean;
   enableZoom?: boolean;
+  ref?: React.RefObject<SVGSVGElement>;
 }
 
-export const InteractiveSVG = React.forwardRef<SVGSVGElement, InteractiveSVGProps>(({
+export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
   width,
   height,
   children,
@@ -30,7 +31,8 @@ export const InteractiveSVG = React.forwardRef<SVGSVGElement, InteractiveSVGProp
   maxScale = 10,
   enablePan = true,
   enableZoom = true,
-}, ref) => {
+  ref: externalRef,
+}) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<ViewTransform>({ x: 0, y: 0, scale: 1 });
@@ -157,14 +159,12 @@ export const InteractiveSVG = React.forwardRef<SVGSVGElement, InteractiveSVGProp
     }
   }, [enablePan]);
 
-  // Forward ref to SVG element
+  // Update external ref when svgRef changes
   useEffect(() => {
-    if (typeof ref === 'function') {
-      ref(svgRef.current);
-    } else if (ref) {
-      ref.current = svgRef.current;
+    if (externalRef && svgRef.current) {
+      (externalRef as any).current = svgRef.current;
     }
-  }, [ref]);
+  }, [externalRef, svgRef.current]);
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
@@ -242,8 +242,6 @@ export const InteractiveSVG = React.forwardRef<SVGSVGElement, InteractiveSVGProp
       </div>
     </div>
   );
-});
-
-InteractiveSVG.displayName = 'InteractiveSVG';
+};
 
 export default InteractiveSVG;
