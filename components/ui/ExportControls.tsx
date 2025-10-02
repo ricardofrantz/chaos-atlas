@@ -68,6 +68,11 @@ export const ExportControls: React.FC<ExportControlsProps> = ({
       return;
     }
 
+    if (!svgElement) {
+      alert('No visualization available to export');
+      return;
+    }
+
     setIsExporting(true);
     try {
       const exporter = createPlotExporter(svgElement, metadata);
