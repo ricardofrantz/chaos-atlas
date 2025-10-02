@@ -20,7 +20,7 @@ interface InteractiveSVGProps {
   enableZoom?: boolean;
 }
 
-export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
+export const InteractiveSVG = React.forwardRef<SVGSVGElement, InteractiveSVGProps>(({
   width,
   height,
   children,
@@ -30,7 +30,7 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
   maxScale = 10,
   enablePan = true,
   enableZoom = true,
-}) => {
+}, ref) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<ViewTransform>({ x: 0, y: 0, scale: 1 });
@@ -157,6 +157,15 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
     }
   }, [enablePan]);
 
+  // Forward ref to SVG element
+  useEffect(() => {
+    if (typeof ref === 'function') {
+      ref(svgRef.current);
+    } else if (ref) {
+      ref.current = svgRef.current;
+    }
+  }, [ref]);
+
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <svg
@@ -233,6 +242,8 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
       </div>
     </div>
   );
-};
+});
+
+InteractiveSVG.displayName = 'InteractiveSVG';
 
 export default InteractiveSVG;
