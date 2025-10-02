@@ -28,7 +28,7 @@ export const calculateTentMapWrapper = (params: any, iterations: number) => {
 };
 
 export const calculateBakersMapWrapper = (params: any, iterations: number) => {
-  return calculateBakersMap(params.x0 || 0.1, params.y0 || 0.1, iterations);
+  return calculateBakersMap({ x: params.x0 || 0.1, y: params.y0 || 0.1 }, iterations);
 };
 
 export const calculateArnoldMapWrapper = (params: any, iterations: number) => {
