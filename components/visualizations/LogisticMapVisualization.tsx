@@ -464,7 +464,7 @@ const LogisticMapVisualization: React.FC = () => {
             <div className="bg-black/40 border border-cyan-500/20 rounded-lg p-6">
               <div className="flex justify-center">
                 <InteractiveSVG
-                  ref={interactiveSvgRef}
+                  svgRef={interactiveSvgRef}
                   width={width}
                   height={height}
                   onTransformChange={plotTransform.updateTransform}

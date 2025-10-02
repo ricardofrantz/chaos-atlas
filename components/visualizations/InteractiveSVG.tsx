@@ -18,7 +18,7 @@ interface InteractiveSVGProps {
   maxScale?: number;
   enablePan?: boolean;
   enableZoom?: boolean;
-  ref?: React.RefObject<SVGSVGElement>;
+  svgRef?: React.RefObject<SVGSVGElement>;
 }
 
 export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
@@ -31,9 +31,9 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
   maxScale = 10,
   enablePan = true,
   enableZoom = true,
-  ref: externalRef,
+  svgRef: externalRef,
 }) => {
-  const svgRef = useRef<SVGSVGElement>(null);
+  const internalSvgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<ViewTransform>({ x: 0, y: 0, scale: 1 });
   const [isPanning, setIsPanning] = useState(false);
@@ -42,11 +42,11 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
 
   // Transform coordinates from screen to data space
   const screenToData = useCallback((screenX: number, screenY: number) => {
-    if (!svgRef.current) return { x: 0, y: 0 };
-    const pt = svgRef.current.createSVGPoint();
+    if (!internalSvgRef.current) return { x: 0, y: 0 };
+    const pt = internalSvgRef.current.createSVGPoint();
     pt.x = screenX;
     pt.y = screenY;
-    const svgP = pt.matrixTransform(svgRef.current.getScreenCTM()?.inverse());
+    const svgP = pt.matrixTransform(internalSvgRef.current.getScreenCTM()?.inverse());
     return {
       x: (svgP.x - transform.x) / transform.scale,
       y: (svgP.y - transform.y) / transform.scale,
@@ -70,8 +70,8 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
     setLastTransform(transform);
 
     // Change cursor
-    if (svgRef.current) {
-      svgRef.current.style.cursor = 'grabbing';
+    if (internalSvgRef.current) {
+      internalSvgRef.current.style.cursor = 'grabbing';
     }
   }, [enablePan, transform]);
 
@@ -95,8 +95,8 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
   // Handle mouse up to end panning
   const handleMouseUp = useCallback(() => {
     setIsPanning(false);
-    if (svgRef.current) {
-      svgRef.current.style.cursor = enablePan ? 'grab' : 'default';
+    if (internalSvgRef.current) {
+      internalSvgRef.current.style.cursor = enablePan ? 'grab' : 'default';
     }
   }, [enablePan]);
 
@@ -107,7 +107,7 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
     e.preventDefault();
 
     // Get mouse position in SVG coordinates
-    const rect = svgRef.current?.getBoundingClientRect();
+    const rect = internalSvgRef.current?.getBoundingClientRect();
     if (!rect) return;
 
     const mouseX = e.clientX - rect.left;
@@ -143,8 +143,8 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
   useEffect(() => {
     const handleGlobalMouseUp = () => {
       setIsPanning(false);
-      if (svgRef.current) {
-        svgRef.current.style.cursor = enablePan ? 'grab' : 'default';
+      if (internalSvgRef.current) {
+        internalSvgRef.current.style.cursor = enablePan ? 'grab' : 'default';
       }
     };
 
@@ -154,22 +154,22 @@ export const InteractiveSVG: React.FC<InteractiveSVGProps> = ({
 
   // Set initial cursor style
   useEffect(() => {
-    if (svgRef.current) {
-      svgRef.current.style.cursor = enablePan ? 'grab' : 'default';
+    if (internalSvgRef.current) {
+      internalSvgRef.current.style.cursor = enablePan ? 'grab' : 'default';
     }
   }, [enablePan]);
 
   // Update external ref when svgRef changes
   useEffect(() => {
-    if (externalRef && svgRef.current) {
-      (externalRef as any).current = svgRef.current;
+    if (externalRef && internalSvgRef.current) {
+      (externalRef as any).current = internalSvgRef.current;
     }
-  }, [externalRef, svgRef.current]);
+  }, [externalRef, internalSvgRef.current]);
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <svg
-        ref={svgRef}
+        ref={internalSvgRef}
         width={width}
         height={height}
         className={`border border-cyan-500/20 rounded ${enablePan ? 'cursor-grab' : ''}`}
