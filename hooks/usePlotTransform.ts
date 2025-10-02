@@ -207,13 +207,7 @@ export const usePlotTransform = ({
     return closePath ? path + ' Z' : path;
   }, [dataToSVG]);
 
-  // Update SVG ref
-  useEffect(() => {
-    return () => {
-      svgRef.current = null;
-    };
-  }, []);
-
+  
   return {
     // State
     transform,
