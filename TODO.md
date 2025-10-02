@@ -90,7 +90,7 @@ This document provides a comprehensive list of all features, implementations, an
 ### **User Interface and Navigation**
 - [x] Main page with navigation to all maps
 - [x] Theme system (3 themes: Black & White, Neon Vintage, Blue Tron)
-- [x] **NEW**: Data visualization theme system (4 themes for plots)
+- [x] **PARTIAL**: Data visualization theme system (4 themes - ONLY in LogisticMap)
 - [x] Responsive design for mobile, tablet, desktop
 - [x] Interactive parameter sliders
 - [x] Real-time visualization updates
@@ -101,10 +101,17 @@ This document provides a comprehensive list of all features, implementations, an
 - [x] D3.js integration for 2D visualizations
 - [x] SVG-based line plots and scatter plots
 - [x] Heat map visualizations for CML
-- [x] **NEW**: Theme-aware plotting with dynamic color switching
-- [x] **NEW**: Simplified interactive controls
+- [x] **PARTIAL**: Theme-aware plotting (ONLY in LogisticMap, NOT in other visualizations)
+- [ ] **BROKEN**: Interactive pan & zoom controls (NOT WORKING in any visualization)
+- [ ] **BROKEN**: Export functionality (PLACEHOLDER only, NOT WORKING in any visualization)
 - [ ] Color-coded parameter spaces (NOT IMPLEMENTED)
 - [ ] Interactive tooltips and information panels (LIMITED)
+
+### **Critical Issues - CURRENTLY NOT WORKING**
+- [ ] **Zoom & Pan Controls**: Mouse drag and scroll zoom not functional
+- [ ] **Export Features**: PNG/SVG/CSV export not implemented (only placeholder alerts)
+- [ ] **Universal Themes**: Theme system only works in LogisticMap, not applied to other 8+ visualizations
+- [ ] **Interactive Controls**: Advanced controls missing from most visualizations
 
 ### **Advanced Features - COMPLETED**
 - [x] **Comparative Analysis Mode**
@@ -142,30 +149,30 @@ This document provides a comprehensive list of all features, implementations, an
 
 ---
 
-## 🚀 **HIGH PRIORITY - Immediate Next Steps (Phase 1)**
+## 🚀 **HIGH PRIORITY - Critical Issues (Phase 1)**
 
-### **Enhanced Interactive Features**
-- [ ] **Advanced Pan & Zoom Controls**
-  - [ ] Mouse drag to pan functionality
-  - [ ] Scroll wheel zoom with center-focused scaling
-  - [ ] Zoom level indicators and controls
-  - [ ] Touch support for mobile devices
-  - [ ] Coordinate transformation utilities
+### **BROKEN FEATURES - NOT WORKING**
+- [ ] **Pan & Zoom Controls - COMPLETELY BROKEN**
+  - [ ] Mouse drag to pan functionality - NOT WORKING in ANY visualization
+  - [ ] Scroll wheel zoom - NOT WORKING in ANY visualization
+  - [ ] Zoom level indicators - MISSING from ALL visualizations
+  - [ ] Touch support - NOT IMPLEMENTED
+  - [ ] InteractiveSVG component - BROKEN due to circular dependencies
 
-- [ ] **Export Functionality**
-  - [ ] PNG export with high-resolution support
-  - [ ] SVG export for vector graphics
-  - [ ] CSV export for data analysis
-  - [ ] Academic vs Clean export modes
-  - [ ] Custom resolution and DPI settings
+- [ ] **Export Functionality - PLACEHOLDER ONLY**
+  - [ ] PNG export - NOT IMPLEMENTED (only placeholder alerts)
+  - [ ] SVG export - NOT IMPLEMENTED
+  - [ ] CSV export - NOT IMPLEMENTED
+  - [ ] Export controls - PLACEHOLDER only in LogisticMap
+  - [ ] Export system - NOT WORKING in ANY visualization
 
-### **Theme System Enhancements**
-- [ ] **Extended Data Themes**
-  - [ ] Add 13 additional themes from the original design
-  - [ ] Theme categories: Simple, Scientific, Artistic, Crazy
-  - [ ] Theme preview and random selection
-  - [ ] Custom theme creation interface
-  - [ ] Theme persistence in user preferences
+### **UNIVERSAL FEATURES - MISSING FROM MOST VISUALIZATIONS**
+- [ ] **Universal Theme System - NOT UNIVERSAL**
+  - [ ] Theme system only works in LogisticMap (1 of 9+ visualizations)
+  - [ ] HenonMap, TentMap, StandardMap, CML - NO THEMES
+  - [ ] All Tier 2 maps (Ikeda, Tinkerbell, Duffing, etc.) - NO THEMES
+  - [ ] Theme consistency - COMPLETELY MISSING
+  - [ ] Theme application - NEED TO BE APPLIED TO ALL VISUALIZATIONS
 
 ### **Improved Visualizations**
 - [ ] **Enhanced Plot Features**
@@ -386,16 +393,17 @@ This document provides a comprehensive list of all features, implementations, an
 
 ---
 
-## 🎯 **REVISED PRIORITY MATRIX**
+## 🎯 **REVISED PRIORITY MATRIX - CRITICAL ISSUES**
 
 | Feature Category | Priority | Effort | Impact | Timeline | Status |
 |------------------|----------|---------|---------|----------|---------|
-| **CRITICAL - Enhanced Interactive Features** | **CRITICAL** | Medium | **CRITICAL** | 1-2 weeks | IN PROGRESS |
-| Advanced Pan & Zoom Controls | **CRITICAL** | Medium | **HIGH** | 1 week | TODO |
-| Export Functionality (PNG/SVG/CSV) | **CRITICAL** | Medium | **HIGH** | 1-2 weeks | TODO |
-| Extended Theme System (17 themes) | **HIGH** | Medium | **HIGH** | 1-2 weeks | TODO |
+| **CRITICAL - BROKEN CORE FEATURES** | **CRITICAL** | Medium | **CRITICAL** | 1-2 weeks | **BROKEN** |
+| Fix InteractiveSVG Component (circular deps) | **CRITICAL** | High | **CRITICAL** | 1 week | BROKEN |
+| Implement Real Pan & Zoom Controls | **CRITICAL** | Medium | **CRITICAL** | 1 week | NOT WORKING |
+| Implement Real Export Functionality | **CRITICAL** | Medium | **HIGH** | 1-2 weeks | PLACEHOLDER ONLY |
+| Universal Theme System (apply to ALL 9+ maps) | **CRITICAL** | Medium | **HIGH** | 1-2 weeks | ONLY IN 1 MAP |
 | Enhanced Plot Features (tooltips, animation) | **HIGH** | Medium | **HIGH** | 2 weeks | TODO |
-| Lyapunov Exponent Display | **HIGH** | Low | **HIGH** | 1 week | TODO |
+| Lyapunov Exponent Display | **HIGH** | Low | **HIGH** | 1 week | PARTIAL |
 | Performance Optimizations | **MEDIUM** | Medium | **MEDIUM** | 2-3 weeks | TODO |
 | Educational Features (presets, tutorials) | **MEDIUM** | Medium | **MEDIUM** | 3-4 weeks | TODO |
 | 3D Visualization Framework | **LOW** | High | **MEDIUM** | 4-5 weeks | TODO |
@@ -469,33 +477,46 @@ This document provides a comprehensive list of all features, implementations, an
 
 ---
 
-## 🎯 **IMMEDIATE NEXT ACTIONS**
+## 🎯 **IMMEDIATE NEXT ACTIONS - CRITICAL FIXES NEEDED**
 
-### **This Week:**
-1. **Restore Advanced Interactive Features**
-   - Implement pan & zoom controls with mouse drag and scroll
-   - Add full export functionality (PNG/SVG/CSV)
-   - Extend theme system to 17 themes with categories
-   - Add interactive tooltips and enhanced controls
+### **This Week - CRITICAL ISSUES TO FIX:**
+1. **Fix Broken Interactive Features**
+   - **URGENT**: Fix InteractiveSVG component circular dependencies
+   - **URGENT**: Implement working pan & zoom controls (currently NOT WORKING)
+   - **URGENT**: Replace placeholder export with real functionality
+   - **URGENT**: Apply theme system to ALL 9+ visualizations (currently only in 1)
 
-2. **Enhance Existing Visualizations**
-   - Apply new theme system to all map visualizations
-   - Add zoom controls and coordinate display
-   - Implement loading states and performance indicators
-   - Better axis formatting and labels
+2. **Universal Feature Application**
+   - Apply themes to HenonMap, TentMap, StandardMap, CML, and all Tier 2 maps
+   - Add working export controls to ALL visualizations
+   - Add working zoom controls to ALL visualizations
+   - Ensure consistent UI/UX across ALL map pages
 
-### **This Month:**
-1. **Complete Interactive Feature Set**
-   - Full pan/zoom implementation for all maps
-   - Complete export system with multiple formats
-   - Extended theme system with preview and selection
-   - Enhanced user interface with better feedback
+### **This Month - COMPLETE FEATURE PARITY:**
+1. **Universal Interactive System**
+   - Working pan/zoom in ALL visualizations
+   - Working export in ALL visualizations
+   - Theme system in ALL visualizations
+   - Consistent controls and layout across ALL maps
 
-2. **Performance and Polish**
-   - Optimize rendering performance
-   - Add comprehensive error handling
-   - Implement Lyapunov exponent display
-   - Add parameter presets for interesting behaviors
+2. **Quality and Completeness**
+   - Remove all placeholder functionality
+   - Ensure all features work reliably
+   - Comprehensive testing across all visualization types
+   - Performance optimization for all interactive features
+
+## 🚨 **CURRENT STATE - WHAT USERS CANNOT DO:**
+❌ Pan or zoom any visualization (broken in ALL maps)
+❌ Export any data or plots (placeholder only in ALL maps)
+❌ Change themes on 8 out of 9 maps (themes only work in LogisticMap)
+❌ Access advanced interactive controls (missing from ALL maps)
+
+## 📋 **CRITICAL MISSING FUNCTIONALITY:**
+- InteractiveSVG component is broken and needs to be rebuilt
+- Theme system needs to be applied universally (currently isolated)
+- Export system needs to be implemented from scratch
+- Zoom/pan needs to be implemented from scratch
+- All features need to work consistently across ALL visualization types
 
 ### **This Quarter:**
 1. **Educational Features**
