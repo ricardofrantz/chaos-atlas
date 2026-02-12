@@ -1,9 +1,9 @@
 'use client';
 
 import React, { forwardRef, useState, useCallback } from 'react';
-import { NeonButtonProps } from '@/lib/themes/theme-types';
-import { useTheme } from './theme-provider';
-import { cn, getThemeGlow } from '@/lib/themes/theme-utils';
+import { NeonButtonProps, ThemeContextType } from '@/lib/themes/theme-types';
+import { useOptionalTheme } from './theme-provider';
+import { cn, getThemeGlow, defaultThemes } from '@/lib/themes/theme-utils';
 
 const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
   (
@@ -21,7 +21,12 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
     },
     ref
   ) => {
-    const { theme, themes } = useTheme();
+    const themeContext: ThemeContextType | undefined = useOptionalTheme();
+
+    const { theme, themes } = themeContext ?? {
+      theme: 'blue-tron',
+      themes: defaultThemes,
+    };
     const [isHovered, setIsHovered] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
 
@@ -113,12 +118,12 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
         return;
       }
 
-      // Visual feedback animation
-      setIsPressed(true);
-      setTimeout(() => setIsPressed(false), 150);
+    // Visual feedback animation
+    setIsPressed(true);
+    setTimeout(() => setIsPressed(false), 150);
 
-      onClick?.(event);
-    }, [disabled, loading, onClick]);
+    onClick?.(event);
+  }, [disabled, loading, onClick]);
 
     // Generate accessibility attributes
     const accessibilityProps = {

@@ -27,6 +27,10 @@ export function useTheme(): ThemeContextType {
   return context;
 }
 
+export function useOptionalTheme(): ThemeContextType | undefined {
+  return useContext(ThemeContext);
+}
+
 export function ThemeProvider({
   children,
   themes: providedThemes,
@@ -38,6 +42,14 @@ export function ThemeProvider({
   onThemeChange,
   isLoading = false,
 }: ThemeProviderProps) {
+  const getResolvedThemeId = (candidateThemeId: string, themeOptions: ThemeConfiguration[]): string => {
+    if (themeOptions.length === 0) {
+      return candidateThemeId;
+    }
+
+    return themeOptions.find(t => t.themeId === candidateThemeId)?.themeId || themeOptions[0].themeId;
+  };
+
   const [theme, setThemeState] = useState<string>(() => {
     // Initialize with default or controlled theme
     if (controlledTheme) {
@@ -69,18 +81,23 @@ export function ThemeProvider({
     return sanitizeThemes(providedThemes || defaultThemes);
   }, [providedThemes]);
 
-  // Find current theme configuration
-  const currentThemeConfig = useMemo(() => {
-    return themes.find(t => t.themeId === theme) || themes[0];
-  }, [themes, theme]);
+  const resolvedThemeState = useMemo(
+    () => getResolvedThemeId(theme, themes),
+    [theme, themes]
+  );
 
   // Resolved theme (actual theme that gets applied)
   const resolvedTheme = useMemo(() => {
     if (controlledTheme) {
-      return controlledTheme;
+      return getResolvedThemeId(controlledTheme, themes);
     }
-    return theme;
-  }, [theme, controlledTheme]);
+    return resolvedThemeState;
+  }, [controlledTheme, themes, resolvedThemeState]);
+
+  // Find current theme configuration
+  const currentThemeConfig = useMemo(() => {
+    return themes.find(t => t.themeId === resolvedTheme) || themes[0];
+  }, [themes, resolvedTheme]);
 
   // Safe theme application with error handling
   const applyTheme = createSafeThemeWrapper((newTheme: string, themeConfig: ThemeConfiguration) => {
@@ -119,28 +136,31 @@ export function ThemeProvider({
 
   // Theme change handler
   const setTheme = useCallback((newTheme: string) => {
-    if (newTheme === theme) return;
+    const resolvedTheme = getResolvedThemeId(newTheme, themes);
+    const isKnownTheme = themes.some(t => t.themeId === newTheme);
 
-    const themeConfig = themes.find(t => t.themeId === newTheme) || themes[0];
+    if (isKnownTheme && newTheme === theme && resolvedTheme === resolvedThemeState) return;
+
+    const themeConfig = themes.find(t => t.themeId === resolvedTheme) || themes[0];
 
     // Apply theme
-    applyTheme(newTheme, themeConfig);
+    applyTheme(resolvedTheme, themeConfig);
 
     // Update state
-    setThemeState(newTheme);
+    setThemeState(resolvedTheme);
 
     // Save to localStorage
-    safeStorageSet(storageKey, newTheme);
+    safeStorageSet(storageKey, resolvedTheme);
 
     // Call external callback
     if (onThemeChange) {
       try {
-        onThemeChange(newTheme);
+        onThemeChange(resolvedTheme);
       } catch (error) {
         console.error('Error in onThemeChange callback:', error);
       }
     }
-  }, [theme, themes, storageKey, onThemeChange, applyTheme]);
+  }, [resolvedThemeState, theme, themes, storageKey, onThemeChange, applyTheme]);
 
   // Debounced theme sync
   const syncTheme = useCallback(
@@ -152,10 +172,10 @@ export function ThemeProvider({
 
   // Handle controlled theme changes
   useEffect(() => {
-    if (controlledTheme && controlledTheme !== theme) {
+    if (controlledTheme && getResolvedThemeId(controlledTheme, themes) !== resolvedTheme) {
       syncTheme(controlledTheme);
     }
-  }, [controlledTheme, theme, syncTheme]);
+  }, [controlledTheme, resolvedTheme, themes, syncTheme]);
 
   // System theme detection
   useEffect(() => {
@@ -228,13 +248,12 @@ export function ThemeProvider({
     setTheme,
     systemTheme,
     themes,
-    resolvedTheme,
     isTransitioning,
     isLoading,
   ]);
 
   return (
-    <ThemeContext.Provider value={contextValue}>
+      <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );

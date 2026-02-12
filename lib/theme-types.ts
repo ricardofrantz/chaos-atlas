@@ -1,4 +1,5 @@
 // src/themes/theme-types.ts
+
 export type ThemeColors = {
   name: string;
   id: string;
