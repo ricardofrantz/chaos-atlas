@@ -3,312 +3,270 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ThemeSwitcher, NeonButton } from '@/components/themes';
+import { ThemeSwitcher } from '@/components/themes';
+
+// --- Section & card data ---------------------------------------------------
+
+interface MapCard {
+  href: string;
+  name: string;
+  description: string;
+  icon: string;
+  iconColor: string;
+  tag: string;
+}
+
+interface Section {
+  title: string;
+  subtitle: string;
+  description: string;
+  accent: 'cyan' | 'magenta' | 'orange' | 'purple';
+  maps: MapCard[];
+}
+
+const sections: Section[] = [
+  {
+    title: '1D Maps',
+    subtitle: 'Gateway to Chaos',
+    description: 'One-dimensional maps that reveal the fundamental mechanisms of chaos',
+    accent: 'cyan',
+    maps: [
+      {
+        href: '/maps/logistic',
+        name: 'Logistic Map',
+        description: 'The simplest chaotic system, demonstrating period doubling and chaos',
+        icon: '∞',
+        iconColor: 'neon-text-orange',
+        tag: 'Bifurcation',
+      },
+      {
+        href: '/maps/tent',
+        name: 'Tent Map',
+        description: 'Piecewise linear chaos with exact analytical solutions and symbolic dynamics',
+        icon: '▲',
+        iconColor: 'neon-text-orange',
+        tag: 'Symbolic',
+      },
+    ],
+  },
+  {
+    title: '2D Maps',
+    subtitle: 'Strange Attractors',
+    description: 'Two-dimensional maps that produce intricate phase-space structures',
+    accent: 'magenta',
+    maps: [
+      {
+        href: '/maps/henon',
+        name: 'Hénon Map',
+        description: 'A classic 2D discrete dynamical system with a strange attractor',
+        icon: '∞',
+        iconColor: 'neon-text-magenta',
+        tag: 'Attractor',
+      },
+      {
+        href: '/maps/standard',
+        name: 'Standard Map',
+        description: 'Conservative system showing transition to chaos in Hamiltonian systems',
+        icon: '⚡',
+        iconColor: 'neon-text-yellow',
+        tag: 'Chaos',
+      },
+      {
+        href: '/maps/ikeda',
+        name: 'Ikeda Map',
+        description: 'Nonlinear optics model with stunning spiral attractors from laser cavity dynamics',
+        icon: '◉',
+        iconColor: 'neon-text-orange',
+        tag: 'Spiral',
+      },
+      {
+        href: '/maps/arnold',
+        name: 'Arnold Cat Map',
+        description: 'Area-preserving transformation with periodic orbits and Fibonacci connections',
+        icon: '◈',
+        iconColor: 'neon-text-orange',
+        tag: 'Periodic',
+      },
+      {
+        href: '/maps/bakers',
+        name: "Baker\u2019s Map",
+        description: 'Stretching and folding dynamics demonstrating exact mixing and symbolic dynamics',
+        icon: '◧',
+        iconColor: 'neon-text-orange',
+        tag: 'Mixing',
+      },
+      {
+        href: '/maps/tinkerbell',
+        name: 'Tinkerbell Map',
+        description: 'Complex polynomial dynamics with multi-loop attractors and bistable behavior',
+        icon: '✦',
+        iconColor: 'neon-text-orange',
+        tag: 'Multi-loop',
+      },
+      {
+        href: '/maps/duffing',
+        name: 'Duffing Map',
+        description: 'Double-well oscillator demonstrating bistable dynamics and physical chaos',
+        icon: '⚛',
+        iconColor: 'neon-text-orange',
+        tag: 'Bistable',
+      },
+      {
+        href: '/maps/complex',
+        name: 'Complex Quadratic',
+        description: 'Julia sets and Mandelbrot set exploring complex dynamics and fractals',
+        icon: '◈',
+        iconColor: 'neon-text-orange',
+        tag: 'Fractals',
+      },
+    ],
+  },
+  {
+    title: 'Coupled Map Lattices',
+    subtitle: 'Spatiotemporal Dynamics',
+    description: 'Spatially extended systems where many maps interact to produce collective behavior',
+    accent: 'orange',
+    maps: [
+      {
+        href: '/cml/diffusive',
+        name: 'Diffusive CML',
+        description: 'Spatiotemporal chaos and pattern formation in coupled map lattices',
+        icon: '∇',
+        iconColor: 'neon-text-orange',
+        tag: 'Interactive',
+      },
+      {
+        href: '/cml/global',
+        name: 'Global CML',
+        description: 'Synchronization phenomena in globally coupled systems',
+        icon: '⟳',
+        iconColor: 'neon-text-magenta',
+        tag: 'Coming Soon',
+      },
+    ],
+  },
+  {
+    title: 'Analysis Tools',
+    subtitle: 'Compare & Quantify',
+    description: 'Side-by-side tools for comparing chaotic systems and measuring their properties',
+    accent: 'purple',
+    maps: [
+      {
+        href: '/compare',
+        name: 'Comparative Analysis',
+        description: 'Side-by-side comparison of different chaotic systems with synchronized parameters',
+        icon: '⚖',
+        iconColor: 'neon-text-purple',
+        tag: 'Interactive',
+      },
+    ],
+  },
+];
+
+// --- Accent color mappings -------------------------------------------------
+
+const accentBorder: Record<string, string> = {
+  cyan: 'border-cyan-500/30',
+  magenta: 'border-pink-500/30',
+  orange: 'border-orange-500/30',
+  purple: 'border-purple-500/30',
+};
+
+const accentDot: Record<string, string> = {
+  cyan: 'bg-cyan-400',
+  magenta: 'bg-pink-400',
+  orange: 'bg-orange-400',
+  purple: 'bg-purple-400',
+};
+
+const accentTagText: Record<string, string> = {
+  cyan: 'text-cyan-400',
+  magenta: 'text-pink-400',
+  orange: 'text-orange-400',
+  purple: 'text-purple-400',
+};
+
+const accentMuted: Record<string, string> = {
+  cyan: 'text-cyan-500/60',
+  magenta: 'text-pink-500/60',
+  orange: 'text-orange-500/60',
+  purple: 'text-purple-500/60',
+};
+
+const cardBorder: Record<string, string> = {
+  cyan: 'border-cyan-500/20 hover:border-cyan-400/40',
+  magenta: 'border-pink-500/20 hover:border-pink-400/40',
+  orange: 'border-orange-500/20 hover:border-orange-400/40',
+  purple: 'border-purple-500/20 hover:border-purple-400/40',
+};
+
+// --- Page ------------------------------------------------------------------
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col" style={{
       background: `linear-gradient(135deg, var(--bg-primary), var(--bg-secondary))`
     }}>
-      <header className="p-6 border-b border-cyan-500/20 bg-black/50 backdrop-blur-sm">
-        <div className="container mx-auto">
-          <div className="text-center mb-4">
-            <h1 className="text-4xl font-bold neon-text-cyan mb-2">
+      {/* Header */}
+      <header className="p-6 border-b bg-black/50 backdrop-blur-sm" style={{ borderColor: 'var(--border-primary)' }}>
+        <div className="container mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold neon-text-cyan mb-1">
               CML Visualizer
             </h1>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
               Explore chaos and complexity through interactive visualizations
             </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/cml/diffusive">
-              <NeonButton variant="primary" size="sm">
-                CML Diffusive
-              </NeonButton>
-            </Link>
-            <Link href="/cml/global">
-              <NeonButton variant="secondary" size="sm">
-                CML Global
-              </NeonButton>
-            </Link>
-            <Link href="/about">
-              <NeonButton variant="tertiary" size="sm">
-                About
-              </NeonButton>
+          <div className="flex items-center gap-4">
+            <Link href="/about" className="text-sm text-gray-400 hover:text-cyan-400 transition-colors">
+              About
             </Link>
             <ThemeSwitcher />
           </div>
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Tent Map Card */}
-          <Link href="/maps/tent" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Tent Map
+      {/* Sections */}
+      <main className="flex-grow container mx-auto p-6 space-y-12">
+        {sections.map((section) => (
+          <section key={section.title}>
+            {/* Section heading */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold">
+                <span className={`neon-text-${section.accent}`}>{section.title}</span>
+                <span className={`ml-3 text-lg font-normal ${accentMuted[section.accent]}`}>
+                  — {section.subtitle}
+                </span>
               </h2>
-              <p className="mb-4 text-gray-300">
-                Piecewise linear chaos with exact analytical solutions and symbolic dynamics
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">▲</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Symbolic</span>
-              </div>
+              <p className="text-sm text-gray-500 mt-1">{section.description}</p>
+              <div className={`mt-3 border-b ${accentBorder[section.accent]}`} />
             </div>
-          </Link>
 
-          {/* Arnold Cat Map Card */}
-          <Link href="/maps/arnold" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Arnold Cat Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Area-preserving transformation with periodic orbits and Fibonacci connections
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">◈</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Periodic</span>
-              </div>
+            {/* Cards grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {section.maps.map((map) => (
+                <Link key={map.href} href={map.href} className="block">
+                  <div className={`h-full p-5 rounded-lg transition-all duration-300 hover:scale-105 border-2 bg-black/30 backdrop-blur-sm ${cardBorder[section.accent]}`}>
+                    <div className="flex items-start gap-3 mb-2">
+                      <span className={`text-3xl leading-none ${map.iconColor}`}>{map.icon}</span>
+                      <h3 className={`text-xl font-bold neon-text-${section.accent}`}>
+                        {map.name}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-300 mb-3">
+                      {map.description}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 ${accentDot[section.accent]} rounded-full animate-pulse`} />
+                      <span className={`text-xs ${accentTagText[section.accent]}`}>{map.tag}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
-          </Link>
-
-          {/* Baker's Map Card */}
-          <Link href="/maps/bakers" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Baker&apos;s Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Stretching and folding dynamics demonstrating exact mixing and symbolic dynamics
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">◧</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Mixing</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Ikeda Map Card */}
-          <Link href="/maps/ikeda" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Ikeda Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Nonlinear optics model with stunning spiral attractors from laser cavity dynamics
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">◉</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Spiral</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Tinkerbell Map Card */}
-          <Link href="/maps/tinkerbell" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Tinkerbell Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Complex polynomial dynamics with multi-loop attractors and bistable behavior
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">✦</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Multi-loop</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Duffing Map Card */}
-          <Link href="/maps/duffing" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Duffing Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Double-well oscillator demonstrating bistable dynamics and physical chaos
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">⚛</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Bistable</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Complex Quadratic Map Card */}
-          <Link href="/maps/complex" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Complex Quadratic
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Julia sets and Mandelbrot set exploring complex dynamics and fractals
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">◈</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Fractals</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Comparative Analysis Card */}
-          <Link href="/compare" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-purple-500/20 bg-black/30 backdrop-blur-sm hover:border-purple-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-purple">
-                Comparative Analysis
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Side-by-side comparison of different chaotic systems with synchronized parameters
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-purple-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-purple">⚖</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-purple-400">Interactive</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Logistic Map Card */}
-          <Link href="/maps/logistic" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Logistic Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                The simplest chaotic system, demonstrating period doubling and chaos
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">∞</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Bifurcation</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Henon Map Card */}
-          <Link href="/maps/henon" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Hénon Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                A classic 2D discrete dynamical system with a strange attractor
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-magenta">∞</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Attractor</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* Standard Map Card */}
-          <Link href="/maps/standard" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Standard Map
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Conservative system showing transition to chaos in Hamiltonian systems
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-yellow">⚡</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Chaos</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* CML Diffusive Card */}
-          <Link href="/cml/diffusive" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Diffusive CML
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Spatiotemporal chaos and pattern formation in coupled map lattices
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-                <div className="text-4xl neon-text-orange">∇</div>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Interactive</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* CML Global Card */}
-          <Link href="/cml/global" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                Global CML
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Synchronization phenomena in globally coupled systems
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-              <div className="text-4xl neon-text-magenta">⟳</div>
-            </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                <span className="text-xs text-cyan-400">Coming Soon</span>
-              </div>
-            </div>
-          </Link>
-
-          {/* About Card */}
-          <Link href="/about" className="block">
-            <div className="h-full p-6 rounded-lg transition-all duration-300 hover:scale-105 border-2 border-cyan-500/20 bg-black/30 backdrop-blur-sm hover:border-cyan-400/40">
-              <h2 className="text-2xl font-bold mb-3 neon-text-cyan">
-                About
-              </h2>
-              <p className="mb-4 text-gray-300">
-                Built with TDD • WCAG AA Compliant • Vintage Tron Aesthetic
-              </p>
-              <div className="h-40 rounded-lg bg-black/50 border border-cyan-500/10 flex items-center justify-center">
-              <div className="text-4xl neon-text-yellow">ⓘ</div>
-            </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-cyan-400">Documentation</span>
-              </div>
-            </div>
-          </Link>
-        </div>
+          </section>
+        ))}
       </main>
     </div>
   );

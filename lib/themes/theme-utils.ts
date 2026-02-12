@@ -1,10 +1,16 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import clsx, { type ClassValue } from 'clsx';
+import * as tailwindMerge from 'tailwind-merge';
 import { ThemeConfiguration, ThemeColors } from './theme-types';
+
+const importedTwMerge = (tailwindMerge as { twMerge?: (...classNames: string[]) => string }).twMerge;
 
 // Utility function for combining CSS classes
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  const merged = clsx(inputs);
+  if (typeof importedTwMerge === 'function') {
+    return importedTwMerge(merged);
+  }
+  return merged;
 }
 
 // Default themes - Simple 3 theme system
@@ -82,47 +88,62 @@ export function isValidThemeColors(colors: Partial<ThemeColors>): colors is Them
   });
 }
 
-export function sanitizeTheme(theme: Partial<ThemeConfiguration>): ThemeConfiguration | null {
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+export function sanitizeTheme(theme: Partial<ThemeConfiguration> | null | undefined): ThemeConfiguration | null {
   try {
+    if (!isObject(theme)) {
+      console.warn('Invalid theme object provided');
+      return null;
+    }
+
+    const typedTheme = theme as Partial<ThemeConfiguration> & Record<string, unknown>;
+
     // Validate required fields
-    if (!theme.themeId || !theme.name) {
+    if (typeof typedTheme.themeId !== 'string' || typedTheme.themeId.trim().length === 0 ||
+        typeof typedTheme.name !== 'string' || typedTheme.name.trim().length === 0) {
       console.warn('Theme missing required fields: themeId or name');
       return null;
     }
 
     // Validate colors
-    if (!isValidThemeColors(theme.colors || {})) {
-      console.warn(`Theme "${theme.name}" has invalid colors`);
+    if (!isObject(typedTheme.colors) || !isValidThemeColors(typedTheme.colors as Partial<ThemeColors>)) {
+      console.warn(`Theme "${typedTheme.name}" has invalid colors`);
       return null;
     }
 
     // Merge with defaults
     const sanitizedTheme: ThemeConfiguration = {
-      themeId: theme.themeId,
-      name: theme.name,
-      colors: theme.colors!,
+      themeId: typedTheme.themeId,
+      name: typedTheme.name,
+      colors: typedTheme.colors as ThemeColors,
       glow: {
         intensity: 0.8,
         blurRadius: '8px',
         spreadRadius: '2px',
-        ...theme.glow,
+        ...(typedTheme.glow || {}),
       },
       animation: {
         duration: '0.3s',
         easing: 'ease-out',
         reducedMotion: false,
-        ...theme.animation,
+        ...(typedTheme.animation || {}),
       },
       accessibility: {
         highContrast: false,
         reducedGlow: false,
-        ...theme.accessibility,
+        ...(typedTheme.accessibility || {}),
       },
     };
 
     return sanitizedTheme;
   } catch (error) {
-    console.error(`Error sanitizing theme "${theme.name}":`, error);
+    const themeName = isObject(theme) && typeof (theme as Record<string, unknown>).name === 'string'
+      ? (theme as Record<string, unknown>).name
+      : 'unknown';
+    console.error(`Error sanitizing theme "${themeName}":`, error);
     return null;
   }
 }
@@ -237,30 +258,51 @@ export function getHighContrastPreference(): boolean {
 export function applyThemeCSSProperties(theme: ThemeConfiguration, element: HTMLElement = document.documentElement): void {
   if (!element || !theme) return;
 
-  try {
-    element.setAttribute('data-theme', theme.themeId);
+  const safeSetAttribute = (...args: Parameters<HTMLElement['setAttribute']>) => {
+    try {
+      element.setAttribute(...args);
+    } catch (error) {
+      console.error('Error applying theme data attribute:', error);
+    }
+  };
 
-    // Apply color variables
-    Object.entries(theme.colors).forEach(([key, value]) => {
-      element.style.setProperty(`--tron-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`, value);
-    });
+  const safeSetProperty = (...args: Parameters<CSSStyleDeclaration['setProperty']>) => {
+    try {
+      element.style.setProperty(...args);
+    } catch (error) {
+      console.error('Error setting theme CSS property:', error);
+    }
+  };
 
-    // Apply glow variables
-    element.style.setProperty('--tron-glow-intensity', theme.glow.intensity.toString());
-    element.style.setProperty('--tron-glow-blur-radius', theme.glow.blurRadius);
-    element.style.setProperty('--tron-glow-spread-radius', theme.glow.spreadRadius);
+  // Apply root data attribute
+  safeSetAttribute('data-theme', theme.themeId);
 
-    // Apply animation variables
-    element.style.setProperty('--tron-animation-duration', theme.animation.duration);
-    element.style.setProperty('--tron-animation-easing', theme.animation.easing);
-    element.style.setProperty('--tron-reduced-motion', theme.animation.reducedMotion ? 'reduce' : 'no-preference');
+  // Apply color variables
+  Object.entries(theme.colors).forEach(([key, value]) => {
+    safeSetProperty(`--tron-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`, value);
+  });
 
-    // Apply accessibility variables
-    element.style.setProperty('--tron-high-contrast', theme.accessibility.highContrast ? 'high' : 'normal');
-    element.style.setProperty('--tron-reduced-glow', theme.accessibility.reducedGlow ? 'true' : 'false');
-  } catch (error) {
-    console.error('Error applying theme CSS properties:', error);
-  }
+  // Apply glow variables
+  safeSetProperty('--tron-glow-intensity', theme.glow.intensity.toString());
+  safeSetProperty('--tron-glow-blur-radius', theme.glow.blurRadius);
+  safeSetProperty('--tron-glow-spread-radius', theme.glow.spreadRadius);
+
+  // Apply animation variables
+  safeSetProperty('--tron-animation-duration', theme.animation.duration);
+  safeSetProperty('--tron-animation-easing', theme.animation.easing);
+  safeSetProperty('--tron-reduced-motion', theme.animation.reducedMotion ? 'reduce' : 'no-preference');
+
+  // Apply accessibility variables
+  safeSetProperty('--tron-high-contrast', theme.accessibility.highContrast ? 'high' : 'normal');
+  safeSetProperty('--tron-reduced-glow', theme.accessibility.reducedGlow ? 'true' : 'false');
+
+  // Bridge --bg-* variables used by globals.css and page components
+  safeSetProperty('--bg-primary', theme.colors.background);
+  // Derive a subtle secondary background by tinting background toward the border color
+  safeSetProperty('--bg-secondary', theme.colors.background);
+  safeSetProperty('--text-primary', theme.colors.text);
+  safeSetProperty('--text-secondary', theme.colors.textSecondary);
+  safeSetProperty('--border-primary', `${theme.colors.border}4d`);
 }
 
 export function removeThemeCSSProperties(element: HTMLElement = document.documentElement): void {

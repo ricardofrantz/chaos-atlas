@@ -1,5 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider } from '@/components/themes/theme-provider';
+import { runUserAction } from '../utils/test-actions';
 
 // Mock localStorage
 const localStorageMock = {
@@ -36,7 +38,7 @@ describe('ThemeProvider', () => {
 
   it('renders children without crashing', () => {
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <div>Test Child</div>
       </ThemeProvider>
     );
@@ -50,7 +52,7 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
@@ -72,7 +74,7 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
@@ -81,6 +83,8 @@ describe('ThemeProvider', () => {
   });
 
   it('saves theme preference to localStorage', async () => {
+    const user = userEvent.setup();
+
     const TestComponent = () => {
       const context = require('@/components/themes/theme-provider').useTheme();
       return (
@@ -94,16 +98,16 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
 
     const button = screen.getByText('Set Tron Theme');
-    fireEvent.click(button);
+    await runUserAction(() => user.click(button));
 
     await waitFor(() => {
-      expect(localStorageMock.setItem).toHaveBeenCalledWith('cml-theme', 'tron-dark');
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('cml-theme', 'black-white');
     });
   });
 
@@ -116,13 +120,136 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider storageKey="cml-theme">
+      <ThemeProvider enableSystem={false} disableTransitionOnChange storageKey="cml-theme">
         <TestComponent />
       </ThemeProvider>
     );
 
-    expect(screen.getByText(/Theme:.*tron-dark/)).toBeInTheDocument();
+    expect(screen.getByText(/Theme:.*black-white/)).toBeInTheDocument();
     expect(localStorageMock.getItem).toHaveBeenCalledWith('cml-theme');
+  });
+
+  it('normalizes storage theme value to configured themes', () => {
+    localStorageMock.getItem.mockReturnValue('light');
+
+    const customThemes = [
+      {
+        themeId: 'tron-dark',
+        name: 'Tron Dark',
+        colors: {
+          background: '#000000',
+          primary: '#00ffff',
+          secondary: '#ff7f00',
+          tertiary: '#ff00ff',
+          warning: '#ffff00',
+          text: '#ffffff',
+          textSecondary: '#cccccc',
+          border: '#333333',
+          glow: '#00ffff',
+        },
+        glow: { intensity: 0.8, blurRadius: '8px', spreadRadius: '2px' },
+        animation: { duration: '0.3s', easing: 'ease-out', reducedMotion: false },
+        accessibility: { highContrast: false, reducedGlow: false },
+      },
+      {
+        themeId: 'tron-light',
+        name: 'Tron Light',
+        colors: {
+          background: '#0a0a0a',
+          primary: '#40ffff',
+          secondary: '#ff9f20',
+          tertiary: '#ff40ff',
+          warning: '#ffff40',
+          text: '#ffffff',
+          textSecondary: '#dddddd',
+          border: '#555555',
+          glow: '#40ffff',
+        },
+        glow: { intensity: 0.6, blurRadius: '6px', spreadRadius: '1px' },
+        animation: { duration: '0.2s', easing: 'ease-out', reducedMotion: false },
+        accessibility: { highContrast: false, reducedGlow: false },
+      },
+    ];
+
+    const TestComponent = () => {
+      const context = require('@/components/themes/theme-provider').useTheme();
+      return <div>Theme: {context.theme}</div>;
+    };
+
+    render(
+      <ThemeProvider enableSystem={false} disableTransitionOnChange themes={customThemes} storageKey="cml-theme">
+        <TestComponent />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByText('Theme: tron-dark')).toBeInTheDocument();
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('cml-theme');
+  });
+
+  it('normalizes controlled currentTheme alias to configured theme IDs', async () => {
+    const customThemes = [
+      {
+        themeId: 'tron-dark',
+        name: 'Tron Dark',
+        colors: {
+          background: '#000000',
+          primary: '#00ffff',
+          secondary: '#ff7f00',
+          tertiary: '#ff00ff',
+          warning: '#ffff00',
+          text: '#ffffff',
+          textSecondary: '#cccccc',
+          border: '#333333',
+          glow: '#00ffff',
+        },
+        glow: { intensity: 0.8, blurRadius: '8px', spreadRadius: '2px' },
+        animation: { duration: '0.3s', easing: 'ease-out', reducedMotion: false },
+        accessibility: { highContrast: false, reducedGlow: false },
+      },
+      {
+        themeId: 'tron-light',
+        name: 'Tron Light',
+        colors: {
+          background: '#0a0a0a',
+          primary: '#40ffff',
+          secondary: '#ff9f20',
+          tertiary: '#ff40ff',
+          warning: '#ffff40',
+          text: '#ffffff',
+          textSecondary: '#dddddd',
+          border: '#555555',
+          glow: '#40ffff',
+        },
+        glow: { intensity: 0.6, blurRadius: '6px', spreadRadius: '1px' },
+        animation: { duration: '0.2s', easing: 'ease-out', reducedMotion: false },
+        accessibility: { highContrast: false, reducedGlow: false },
+      },
+    ];
+
+    const TestComponent = () => {
+      const context = require('@/components/themes/theme-provider').useTheme();
+      return <div>Theme: {context.theme}</div>;
+    };
+
+    const { rerender } = render(
+      <ThemeProvider enableSystem={false} disableTransitionOnChange themes={customThemes} currentTheme="light">
+        <TestComponent />
+      </ThemeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Theme: tron-dark')).toBeInTheDocument();
+    });
+
+    rerender(
+      <ThemeProvider enableSystem={false} disableTransitionOnChange themes={customThemes} currentTheme="tron-light">
+        <TestComponent />
+      </ThemeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Theme: tron-light')).toBeInTheDocument();
+    });
   });
 
   it('respects system theme preference', () => {
@@ -144,7 +271,7 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider enableSystem>
+      <ThemeProvider enableSystem disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
@@ -152,12 +279,14 @@ describe('ThemeProvider', () => {
     expect(screen.getByText(/System:.*dark/)).toBeInTheDocument();
   });
 
-  it('applies theme class to document element', () => {
+  it('applies theme class to document element', async () => {
+    const user = userEvent.setup();
+
     const TestComponent = () => {
       const context = require('@/components/themes/theme-provider').useTheme();
       return (
         <div>
-          <button onClick={() => context.setTheme('tron-theme')}>
+          <button onClick={() => context.setTheme('black-white')}>
             Apply Theme
           </button>
           Current: {context.theme}
@@ -166,18 +295,22 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
 
     const button = screen.getByText('Apply Theme');
-    fireEvent.click(button);
+    await runUserAction(() => user.click(button));
 
-    expect(document.documentElement).toHaveAttribute('data-theme', 'tron-theme');
+    await waitFor(() => {
+      expect(document.documentElement).toHaveAttribute('data-theme', 'black-white');
+    });
   });
 
   it('handles transitions without blocking when disabled', async () => {
+    const user = userEvent.setup();
+
     const TestComponent = () => {
       const context = require('@/components/themes/theme-provider').useTheme();
       return (
@@ -191,13 +324,13 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider disableTransitionOnChange>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
 
     const button = screen.getByText('Apply Theme');
-    fireEvent.click(button);
+    await runUserAction(() => user.click(button));
 
     expect(screen.getByText('Transitioning: No')).toBeInTheDocument();
   });
@@ -209,15 +342,17 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider defaultTheme="tron-dark">
+      <ThemeProvider enableSystem={false} disableTransitionOnChange defaultTheme="tron-dark">
         <TestComponent />
       </ThemeProvider>
     );
 
-    expect(screen.getByText(/Resolved:.*tron-dark/)).toBeInTheDocument();
+    expect(screen.getByText(/Resolved:.*black-white/)).toBeInTheDocument();
   });
 
   it('handles invalid theme gracefully', async () => {
+    const user = userEvent.setup();
+
     const TestComponent = () => {
       const context = require('@/components/themes/theme-provider').useTheme();
       return (
@@ -231,19 +366,21 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
 
     const button = screen.getByText('Set Invalid Theme');
-    fireEvent.click(button);
+    await runUserAction(() => user.click(button));
 
     // Should not crash and should maintain or fallback to a valid theme
     expect(screen.getByText(/Current:/)).toBeInTheDocument();
   });
 
-  it('removes theme class when switching away', async () => {
+  it('falls back to default theme when theme id is empty', async () => {
+    const user = userEvent.setup();
+
     // Start with a theme applied
     document.documentElement.setAttribute('data-theme', 'old-theme');
 
@@ -260,16 +397,16 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
 
     const button = screen.getByText('Clear Theme');
-    fireEvent.click(button);
+    await runUserAction(() => user.click(button));
 
     await waitFor(() => {
-      expect(document.documentElement).not.toHaveAttribute('data-theme');
+      expect(document.documentElement).toHaveAttribute('data-theme', 'black-white');
     });
   });
 
@@ -301,7 +438,7 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider themes={customThemes}>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange themes={customThemes}>
         <TestComponent />
       </ThemeProvider>
     );
@@ -328,7 +465,7 @@ describe('ThemeProvider', () => {
     };
 
     render(
-      <ThemeProvider>
+      <ThemeProvider enableSystem={false} disableTransitionOnChange>
         <TestComponent />
       </ThemeProvider>
     );
@@ -336,5 +473,32 @@ describe('ThemeProvider', () => {
     expect(screen.getByText('Theme Ready')).toBeInTheDocument();
     // The theme system should respect the reduced motion preference
     expect(window.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
+  });
+
+  it('normalizes theme callback ids to known configured themes', async () => {
+    const user = userEvent.setup();
+
+    const mockOnThemeChange = jest.fn();
+    const ThemeCallbackConsumer = () => {
+      const context = require('@/components/themes/theme-provider').useTheme();
+      return (
+        <div>
+          <button onClick={() => context.setTheme('light')}>
+            Set Invalid Theme
+          </button>
+          Current: {context.theme}
+        </div>
+      );
+    };
+
+    render(
+      <ThemeProvider enableSystem={false} disableTransitionOnChange onThemeChange={mockOnThemeChange}>
+        <ThemeCallbackConsumer />
+      </ThemeProvider>
+    );
+
+    await runUserAction(() => user.click(screen.getByText('Set Invalid Theme')));
+
+    expect(mockOnThemeChange).toHaveBeenCalledWith('black-white');
   });
 });

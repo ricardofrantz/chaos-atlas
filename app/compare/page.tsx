@@ -1,121 +1,167 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import * as d3 from 'd3';
 
-// Import all map calculation functions
 import {
-  calculateLogisticMapWrapper,
-  calculateHenonMapWrapper,
-  calculateStandardMapWrapper,
-  calculateTentMapWrapper,
-  calculateBakersMapWrapper,
-  calculateArnoldMapWrapper,
-  calculateIkedaMapWrapper,
-  calculateTinkerbellMapWrapper,
-  calculateDuffingMapWrapper
+  ComparativeMapParams,
+  ComparativeMapSeries,
 } from '@/lib/maps/comparative-wrappers';
-
-interface MapData {
-  name: string;
-  id: string;
-  calculate: (params: any, iterations: number) => any[];
-  defaultParams: any;
-  paramRanges: { [key: string]: { min: number; max: number; step: number } };
-  description: string;
-  dimension: number;
-}
-
-const COMPARISON_MAPS: MapData[] = [
-  {
-    name: 'Logistic Map',
-    id: 'logistic',
-    calculate: calculateLogisticMapWrapper,
-    defaultParams: { r: 3.8, x0: 0.5 },
-    paramRanges: {
-      r: { min: 0, max: 4, step: 0.01 },
-      x0: { min: 0, max: 1, step: 0.01 }
-    },
-    description: 'Classic 1D chaotic system showing period doubling route to chaos',
-    dimension: 1
-  },
-  {
-    name: 'Hénon Map',
-    id: 'henon',
-    calculate: calculateHenonMapWrapper,
-    defaultParams: { a: 1.4, b: 0.3, x0: 0.1, y0: 0.1 },
-    paramRanges: {
-      a: { min: 0, max: 2, step: 0.01 },
-      b: { min: 0, max: 1, step: 0.01 },
-      x0: { min: -2, max: 2, step: 0.01 },
-      y0: { min: -2, max: 2, step: 0.01 }
-    },
-    description: '2D dissipative system with strange attractor',
-    dimension: 2
-  },
-  {
-    name: 'Tent Map',
-    id: 'tent',
-    calculate: calculateTentMapWrapper,
-    defaultParams: { alpha: 1.2, x0: 0.5 },
-    paramRanges: {
-      alpha: { min: 0.5, max: 2, step: 0.01 },
-      x0: { min: 0, max: 1, step: 0.01 }
-    },
-    description: 'Piecewise linear map with exact chaos threshold',
-    dimension: 1
-  },
-  {
-    name: 'Ikeda Map',
-    id: 'ikeda',
-    calculate: calculateIkedaMapWrapper,
-    defaultParams: { a: 0.9, b: 0.9, c: 0.4, d: 6.0, x0: 0.1, y0: 0.1 },
-    paramRanges: {
-      a: { min: 0, max: 1, step: 0.01 },
-      b: { min: 0, max: 1, step: 0.01 },
-      c: { min: 0, max: 1, step: 0.01 },
-      d: { min: 0, max: 10, step: 0.1 },
-      x0: { min: -2, max: 2, step: 0.01 },
-      y0: { min: -2, max: 2, step: 0.01 }
-    },
-    description: 'Laser cavity dynamics with spiral attractors',
-    dimension: 2
-  },
-  {
-    name: 'Tinkerbell Map',
-    id: 'tinkerbell',
-    calculate: calculateTinkerbellMapWrapper,
-    defaultParams: { a: 0.9, b: -0.6, c: 2.0, d: 0.5, x0: 0.1, y0: 0.1 },
-    paramRanges: {
-      a: { min: -1, max: 1, step: 0.01 },
-      b: { min: -1, max: 1, step: 0.01 },
-      c: { min: -2, max: 2, step: 0.01 },
-      d: { min: -2, max: 2, step: 0.01 },
-      x0: { min: -2, max: 2, step: 0.01 },
-      y0: { min: -2, max: 2, step: 0.01 }
-    },
-    description: 'Polynomial map with multi-loop chaotic attractors',
-    dimension: 2
-  },
-  {
-    name: 'Duffing Map',
-    id: 'duffing',
-    calculate: calculateDuffingMapWrapper,
-    defaultParams: { a: 2.75, b: 0.2, x0: 0.1, y0: 0.1 },
-    paramRanges: {
-      a: { min: 0, max: 4, step: 0.01 },
-      b: { min: 0, max: 1, step: 0.01 },
-      x0: { min: -2, max: 2, step: 0.01 },
-      y0: { min: -2, max: 2, step: 0.01 }
-    },
-    description: 'Discretized double-well oscillator',
-    dimension: 2
-  }
-];
+import {
+  COMPARISON_MAPS,
+  MAP_BY_ID,
+  ComparisonMapData,
+} from '@/lib/maps/compare-config';
 
 type ComparisonMode = 'time-series' | 'phase-space' | 'bifurcation' | 'lyapunov';
+type ComparisonPoint = number | { x: number; y: number };
+
+const getSafeValue = (value: number): number => {
+  return Number.isFinite(value) ? value : 0;
+};
+
+const getPointScalar = (point: ComparisonPoint): number => {
+  if (typeof point === 'number') {
+    return getSafeValue(point);
+  }
+  return getSafeValue(point.x);
+};
+
+const getPointCoordinate = (
+  point: ComparisonPoint,
+  axis: 'x' | 'y',
+  fallback = 0
+): number => {
+  if (typeof point === 'number') {
+    return getSafeValue(fallback);
+  }
+  return getSafeValue(point[axis]);
+};
+
+const buildTimeSeriesPath = (data: ComparativeMapSeries): string => {
+  const widthFactor = data.length > 0 ? 100 / data.length : 0;
+  return data
+    .map((point, i) => {
+      const value = getPointScalar(point);
+      const clampedValue = Math.max(-2, Math.min(2, value));
+      return `${i * widthFactor},${256 - clampedValue * 100}`;
+    })
+    .join(' L ');
+};
+
+const buildPhaseSpacePath = (data: ComparativeMapSeries): string => {
+  return data
+    .map((point) => {
+      const safeX = Math.max(-2, Math.min(2, getPointCoordinate(point, 'x', 0)));
+      const safeY = Math.max(-2, Math.min(2, getPointCoordinate(point, 'y', 0)));
+      return `${(safeX + 2) * 100},${(safeY + 2) * 100}`;
+    })
+    .join(' L ');
+};
+
+const renderMapComparisonGrid = (
+  selectedMaps: string[],
+  comparisonData: Record<string, ComparativeMapSeries>,
+  cardRenderer: (map: ComparisonMapData | undefined, data: ComparativeMapSeries, mapId: string) => React.ReactElement | null
+) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      {selectedMaps.map(mapId => {
+        const map = MAP_BY_ID[mapId];
+        const data = comparisonData[mapId] || [];
+        return cardRenderer(map, data, mapId);
+      })}
+    </div>
+  );
+};
+
+const renderTimeSeriesCard = (
+  map: ComparisonMapData | undefined,
+  data: ComparativeMapSeries,
+  mapId: string
+): React.ReactElement => {
+  return (
+    <div key={map?.id || mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
+      <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name || mapId}</h3>
+      <div className="h-64">
+        <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
+          {data.length > 0 && (
+            <g>
+              <path
+                d={`M ${buildTimeSeriesPath(data)}`}
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="1"
+              />
+            </g>
+          )}
+        </svg>
+      </div>
+      <p className="text-sm text-gray-400 mt-2">{map?.description}</p>
+    </div>
+  );
+};
+
+const renderPhaseSpaceCard = (
+  map: ComparisonMapData | undefined,
+  data: ComparativeMapSeries,
+  mapId: string
+): React.ReactElement => {
+  if (map?.dimension !== 2) {
+    return (
+      <div key={map?.id || mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4 flex items-center justify-center">
+        <p className="text-gray-400">Phase space not available for 1D maps</p>
+      </div>
+    );
+  }
+
+  return (
+    <div key={map?.id || mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
+      <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name || mapId}</h3>
+      <div className="h-64">
+        <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
+          {data.length > 0 && (
+            <g>
+              <path
+                d={`M ${buildPhaseSpacePath(data)}`}
+                fill="none"
+                stroke="#00ffff"
+                strokeWidth="0.5"
+                opacity="0.8"
+              />
+            </g>
+          )}
+        </svg>
+      </div>
+      <p className="text-sm text-gray-400 mt-2">{map?.description}</p>
+    </div>
+  );
+};
+
+const renderComingSoon = (text: string) => (
+  <div className="text-center py-12">
+    <p className="text-gray-400">{text}</p>
+  </div>
+);
+
+const renderComparisonContent = (
+  mode: ComparisonMode,
+  selectedMaps: string[],
+  comparisonData: Record<string, ComparativeMapSeries>
+): React.ReactElement => {
+  switch (mode) {
+    case 'time-series':
+      return renderMapComparisonGrid(selectedMaps, comparisonData, renderTimeSeriesCard);
+    case 'phase-space':
+      return renderMapComparisonGrid(selectedMaps, comparisonData, renderPhaseSpaceCard);
+    case 'bifurcation':
+      return renderComingSoon('Bifurcation comparison coming soon...');
+    case 'lyapunov':
+      return renderComingSoon('Lyapunov exponent comparison coming soon...');
+    default:
+      return renderComingSoon('Unsupported comparison mode.');
+  }
+};
 
 const ComparativeAnalysis: React.FC = () => {
   const [selectedMaps, setSelectedMaps] = useState<string[]>(['logistic', 'henon']);
@@ -123,20 +169,20 @@ const ComparativeAnalysis: React.FC = () => {
   const [iterations, setIterations] = useState(1000);
   const [syncParams, setSyncParams] = useState(false);
   const [sharedParam, setSharedParam] = useState('r');
-  const [comparisonData, setComparisonData] = useState<{ [key: string]: any[] }>({});
+  const [comparisonData, setComparisonData] = useState<Record<string, ComparativeMapSeries>>({});
 
   const calculateComparisonData = () => {
-    const data: { [key: string]: any[] } = {};
+    const data: Record<string, ComparativeMapSeries> = {};
 
     selectedMaps.forEach(mapId => {
-      const map = COMPARISON_MAPS.find(m => m.id === mapId);
+      const map = MAP_BY_ID[mapId];
       if (map) {
         try {
           // For synchronized parameters, modify the default parameters
-          const params = { ...map.defaultParams };
+          const params: ComparativeMapParams = { ...map.defaultParams };
           if (syncParams && sharedParam in map.paramRanges) {
-            // Use a common parameter value for comparison
-            params[sharedParam] = 1.5; // Mid-range value
+            const range = map.paramRanges[sharedParam];
+            params[sharedParam] = (range.min + range.max) / 2;
           }
 
           const result = map.calculate(params, iterations);
@@ -159,92 +205,7 @@ const ComparativeAnalysis: React.FC = () => {
 
   useEffect(() => {
     calculateComparisonData();
-  }, [selectedMaps, comparisonMode, iterations, syncParams, sharedParam]);
-
-  const renderTimeSeriesComparison = () => {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {selectedMaps.map(mapId => {
-          const map = COMPARISON_MAPS.find(m => m.id === mapId);
-          const data = comparisonData[mapId] || [];
-
-          return (
-            <div key={mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
-              <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name}</h3>
-              <div className="h-64">
-                <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
-                  {data.length > 0 && (
-                    <g>
-                      {/* Time series line */}
-                      <path
-                        d={`M ${data.map((d, i) => {
-                          const value = d.x !== undefined ? d.x : (d.y !== undefined ? d.y : d);
-                          const safeValue = isNaN(value) || value === null || value === undefined ? 0 : value;
-                          const clampedValue = Math.max(-2, Math.min(2, safeValue)); // Clamp to reasonable range
-                          return `${i * 100 / data.length},${256 - clampedValue * 100}`;
-                        }).join(' L ')}`}
-                        fill="none"
-                        stroke="#00ffff"
-                        strokeWidth="1"
-                      />
-                    </g>
-                  )}
-                </svg>
-              </div>
-              <p className="text-sm text-gray-400 mt-2">{map?.description}</p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const renderPhaseSpaceComparison = () => {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {selectedMaps.map(mapId => {
-          const map = COMPARISON_MAPS.find(m => m.id === mapId);
-          const data = comparisonData[mapId] || [];
-
-          // Only show phase space for 2D maps
-          if (map?.dimension !== 2) {
-            return (
-              <div key={mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4 flex items-center justify-center">
-                <p className="text-gray-400">Phase space not available for 1D maps</p>
-              </div>
-            );
-          }
-
-          return (
-            <div key={mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
-              <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name}</h3>
-              <div className="h-64">
-                <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
-                  {data.length > 0 && (
-                    <g>
-                      {/* Phase space trajectory */}
-                      <path
-                        d={`M ${data.map(d => {
-                          const safeX = isNaN(d.x) || d.x === null || d.x === undefined ? 0 : Math.max(-2, Math.min(2, d.x));
-                          const safeY = isNaN(d.y) || d.y === null || d.y === undefined ? 0 : Math.max(-2, Math.min(2, d.y));
-                          return `${(safeX + 2) * 100},${(safeY + 2) * 100}`;
-                        }).join(' L ')}`}
-                        fill="none"
-                        stroke="#00ffff"
-                        strokeWidth="0.5"
-                        opacity="0.8"
-                      />
-                    </g>
-                  )}
-                </svg>
-              </div>
-              <p className="text-sm text-gray-400 mt-2">{map?.description}</p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
+  }, [selectedMaps, iterations, syncParams, sharedParam]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
@@ -385,18 +346,7 @@ const ComparativeAnalysis: React.FC = () => {
             </div>
           ) : (
             <>
-              {comparisonMode === 'time-series' && renderTimeSeriesComparison()}
-              {comparisonMode === 'phase-space' && renderPhaseSpaceComparison()}
-              {comparisonMode === 'bifurcation' && (
-                <div className="text-center py-12">
-                  <p className="text-gray-400">Bifurcation comparison coming soon...</p>
-                </div>
-              )}
-              {comparisonMode === 'lyapunov' && (
-                <div className="text-center py-12">
-                  <p className="text-gray-400">Lyapunov exponent comparison coming soon...</p>
-                </div>
-              )}
+              {renderComparisonContent(comparisonMode, selectedMaps, comparisonData)}
             </>
           )}
         </div>

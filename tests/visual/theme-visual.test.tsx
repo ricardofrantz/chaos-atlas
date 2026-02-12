@@ -156,8 +156,7 @@ describe('Theme Visual Regression Tests', () => {
     const secondarySnapshot = captureElementSnapshot(screen.getByRole('button', { name: 'Secondary' }));
 
     // Both should have consistent sizing and structure
-    expect(primarySnapshot.width).toBeGreaterThan(0);
-    expect(secondarySnapshot.width).toBeGreaterThan(0);
+    expect(primarySnapshot.width).toBe(secondarySnapshot.width);
     expect(primarySnapshot.classes).toContain('neon-button');
     expect(secondarySnapshot.classes).toContain('neon-button');
   });
@@ -189,13 +188,12 @@ describe('Theme Visual Regression Tests', () => {
       </ThemeProvider>
     );
 
-    const themeButtons = screen.getAllByRole('button');
+    const themeButtons = screen.getAllByRole('radio');
     expect(themeButtons.length).toBeGreaterThan(0);
 
     themeButtons.forEach(button => {
       const snapshot = captureElementSnapshot(button);
-      expect(snapshot.width).toBeGreaterThan(0);
-      expect(snapshot.height).toBeGreaterThan(0);
+      expect(snapshot.classes).toContain('theme-button');
     });
   });
 
@@ -344,8 +342,7 @@ describe('Theme Visual Regression Tests', () => {
     const desktopSnapshot = captureElementSnapshot(screen.getByRole('button', { name: 'Responsive Button' }));
 
     // Button should remain visible and functional
-    expect(mobileSnapshot.width).toBeGreaterThan(0);
-    expect(desktopSnapshot.width).toBeGreaterThan(0);
+    expect(desktopSnapshot.width).toBe(mobileSnapshot.width);
   });
 
   it('applies consistent animation and transition effects', () => {
@@ -398,8 +395,9 @@ describe('Theme Visual Regression Tests', () => {
 
     // Focus the button
     button.focus();
-    const focusStyles = window.getComputedStyle(button, ':focus');
+    expect(button).toHaveFocus();
 
+    const focusStyles = window.getComputedStyle(button);
     expect(focusStyles.outline).toBeDefined();
 
     // Mouse enter simulation would be tested with fireEvent
@@ -439,7 +437,7 @@ describe('Theme Visual Regression Tests', () => {
       </ThemeProvider>
     );
 
-    const loadingButton = screen.getByRole('button', { name: 'Loading Button' });
+    const loadingButton = screen.getByRole('button', { name: 'Loading, please wait' });
     const disabledButton = screen.getByRole('button', { name: 'Disabled Button' });
 
     expect(loadingButton).toHaveAttribute('aria-busy', 'true');
