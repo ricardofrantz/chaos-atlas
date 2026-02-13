@@ -8,8 +8,8 @@ import MacOSCompatibility from '@/components/ui/MacOSCompatibility';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CML Visualizer - Tron Theme Edition',
-  description: 'Interactive chaos theory visualizer with vintage Tron aesthetic, neon glow effects, and modern accessibility',
+  title: 'Chaos Atlas',
+  description: 'Interactive web application for exploring chaotic dynamical systems through strange attractors, bifurcation diagrams, and spatiotemporal patterns',
 };
 
 export default function RootLayout({

@@ -1,8 +1,8 @@
-# CML Visualizer
+# Chaos Atlas
 
 Interactive web application for exploring chaotic dynamical systems. Visualize strange attractors, bifurcation diagrams, cobweb plots, Lyapunov exponents, and spatiotemporal patterns across 10 iterated maps and coupled map lattices.
 
-**Live demo:** [ricardofrantz.github.io/cml-visualizer](https://ricardofrantz.github.io/cml-visualizer/)
+**Live demo:** [ricardofrantz.github.io/chaos-atlas](https://ricardofrantz.github.io/chaos-atlas/)
 
 ## Maps
 
@@ -54,8 +54,8 @@ Side-by-side comparison of any maps with synchronized parameters, time series an
 ### Install and Run
 
 ```bash
-git clone https://github.com/ricardofrantz/cml-visualizer.git
-cd cml-visualizer
+git clone https://github.com/ricardofrantz/chaos-atlas.git
+cd chaos-atlas
 npm install
 npm run dev
 ```

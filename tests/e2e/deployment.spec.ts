@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Deployment Verification - E2E Tests', () => {
-  const deployedUrl = 'https://ricardofrantz.github.io/cml-visualizer/';
+  const deployedUrl = 'https://ricardofrantz.github.io/chaos-atlas/';
 
   test.beforeEach(async ({ page }) => {
     // Test the deployed GitHub Pages site
@@ -22,15 +22,15 @@ test.describe('Deployment Verification - E2E Tests', () => {
 
   test('deployed site loads correctly', async ({ page }) => {
     // Check we're on the correct domain
-    expect(page.url()).toContain('ricardofrantz.github.io/cml-visualizer');
+    expect(page.url()).toContain('ricardofrantz.github.io/chaos-atlas');
 
     // Check main heading loads
     const mainHeading = page.locator('h1');
-    await expect(mainHeading).toContainText('CML Visualizer');
+    await expect(mainHeading).toContainText('Chaos Atlas');
     await expect(mainHeading).toBeVisible();
 
     // Check page title
-    await expect(page).toHaveTitle(/CML Visualizer/);
+    await expect(page).toHaveTitle(/Chaos Atlas/);
   });
 
   test('all main navigation elements are present', async ({ page }) => {
@@ -105,7 +105,7 @@ test.describe('Deployment Verification - E2E Tests', () => {
 
     // Check about page content
     const aboutTitle = page.locator('h1');
-    await expect(aboutTitle).toContainText('About CML Visualizer');
+    await expect(aboutTitle).toContainText('About Chaos Atlas');
 
     // Check back to home link
     const backButton = page.locator('a:has-text("← Back to Home")');

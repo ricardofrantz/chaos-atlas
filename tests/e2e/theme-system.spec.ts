@@ -21,7 +21,7 @@ test.describe('Simple Theme System - E2E Tests', () => {
   test('main page loads with theme elements', async ({ page }) => {
     // Check main heading with neon text effect
     const mainHeading = page.locator('h1');
-    await expect(mainHeading).toContainText('CML Visualizer');
+    await expect(mainHeading).toContainText('Chaos Atlas');
     await expect(mainHeading).toHaveClass(/neon-text-cyan/);
 
     // Check theme switcher is present
@@ -196,7 +196,7 @@ test.describe('Simple Theme System - E2E Tests', () => {
 
     // Check about page content
     const aboutTitle = page.locator('h1');
-    await expect(aboutTitle).toContainText('About CML Visualizer');
+    await expect(aboutTitle).toContainText('About Chaos Atlas');
 
     // Check theme switcher is present on about page
     const themeSwitcher = page.locator('.theme-switcher');

@@ -19,7 +19,7 @@ The Tron Theme System is a comprehensive, accessible, and performant theming sol
 
 ### Installation
 
-The theme system is already integrated into the CML Visualizer application. No additional installation required.
+The theme system is already integrated into the Chaos Atlas application. No additional installation required.
 
 ### Basic Usage
 

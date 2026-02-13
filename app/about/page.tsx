@@ -14,7 +14,7 @@ export default function AboutPage() {
               ← Back to Home
             </Link>
             <h1 className="text-3xl font-bold neon-text-cyan mb-2">
-              About CML Visualizer
+              About Chaos Atlas
             </h1>
             <p className="text-lg text-gray-300">
               Explore chaos theory through interactive visualizations with vintage Tron aesthetics
@@ -32,7 +32,7 @@ export default function AboutPage() {
           <section className="p-6 rounded-lg border border-cyan-500/20 bg-black/30 backdrop-blur-sm">
             <h2 className="text-2xl font-bold neon-text-cyan mb-4">Welcome to the Grid</h2>
             <p className="text-gray-300 leading-relaxed mb-4">
-              CML Visualizer is an interactive exploration platform for coupled map lattices and chaos theory,
+              Chaos Atlas is an interactive exploration platform for chaotic dynamical systems,
               combining mathematical beauty with vintage Tron aesthetics. Built with Test-Driven Development
               and modern web standards, it brings complex dynamical systems to life through stunning visualizations.
             </p>

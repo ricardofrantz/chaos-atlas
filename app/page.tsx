@@ -212,7 +212,7 @@ export default function Home() {
         <div className="container mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold neon-text-cyan mb-1">
-              CML Visualizer
+              Chaos Atlas
             </h1>
             <p className="text-lg" style={{ color: 'var(--text-secondary)' }}>
               Explore chaos and complexity through interactive visualizations

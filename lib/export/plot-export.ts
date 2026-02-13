@@ -249,7 +249,7 @@ export class PlotExporter {
       const metadata = {
         title: this.metadata.title,
         subject: `Chaotic Map: ${this.metadata.mapType}`,
-        creator: 'CML Visualizer',
+        creator: 'Chaos Atlas',
         description: `${this.metadata.title} - ${this.metadata.parameters}`,
         keywords: ['chaos', 'dynamical systems', this.metadata.mapType.toLowerCase()],
         created: this.metadata.timestamp.toISOString(),
@@ -281,7 +281,7 @@ export class PlotExporter {
       // Add metadata as XML comments if requested
       if (includeMetadata) {
         const metadataComment = document.createComment(`
-          CML Visualizer Export
+          Chaos Atlas Export
           Title: ${this.metadata.title}
           Map Type: ${this.metadata.mapType}
           Parameters: ${JSON.stringify(this.metadata.parameters, null, 2)}
