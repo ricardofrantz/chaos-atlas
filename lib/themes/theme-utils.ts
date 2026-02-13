@@ -303,6 +303,12 @@ export function applyThemeCSSProperties(theme: ThemeConfiguration, element: HTML
   safeSetProperty('--text-primary', theme.colors.text);
   safeSetProperty('--text-secondary', theme.colors.textSecondary);
   safeSetProperty('--border-primary', `${theme.colors.border}4d`);
+
+  // Bridge --accent-* variables used by D3 visualizations
+  safeSetProperty('--accent-cyan', theme.colors.primary);
+  safeSetProperty('--accent-orange', theme.colors.tertiary || '#ff7f00');
+  safeSetProperty('--accent-magenta', theme.colors.secondary || '#ff00ff');
+  safeSetProperty('--accent-red', theme.colors.warning || '#ff4444');
 }
 
 export function removeThemeCSSProperties(element: HTMLElement = document.documentElement): void {

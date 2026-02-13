@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ThemeSwitcherProps } from '@/lib/themes/theme-types';
 import { useTheme } from './theme-provider';
 import { cn } from '@/lib/themes/theme-utils';
@@ -16,6 +16,13 @@ export function ThemeSwitcher({
   className,
 }: ThemeSwitcherProps) {
   const { theme: contextTheme, setTheme, themes: contextThemes } = useTheme();
+
+  // Defer theme-dependent rendering until after hydration to avoid SSR mismatch.
+  // Server has no localStorage so contextTheme defaults to 'blue-tron', while
+  // the client may load a different saved theme — the mounted flag ensures the
+  // first render matches the server output exactly.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const [glowIntensity, setGlowIntensity] = useState(0.8);
   const [animationSpeed, setAnimationSpeed] = useState(1);
@@ -103,7 +110,7 @@ export function ThemeSwitcher({
       onKeyDown={handleThemeNavigation}
     >
       {themes.map((themeConfig) => {
-        const isActive = themeConfig.themeId === currentTheme;
+        const isActive = mounted && themeConfig.themeId === currentTheme;
 
         return (
           <button
@@ -129,7 +136,7 @@ export function ThemeSwitcher({
             disabled={isLoading}
           >
             {compact ? (
-              <div className="w-full h-full rounded-sm" style={{
+              <span className="w-full h-full rounded-sm block" style={{
                 backgroundColor: themeConfig.colors.primary,
                 boxShadow: isActive ? `0 0 12px ${themeConfig.colors.glow}` : 'none',
               }} />
@@ -148,9 +155,9 @@ export function ThemeSwitcher({
             )}
 
             {isActive && (
-              <div className="absolute inset-0 rounded-md pointer-events-none">
-                <div className="absolute inset-0 rounded-md bg-gradient-to-r from-cyan-400/20 to-purple-400/20 animate-pulse" />
-              </div>
+              <span className="absolute inset-0 rounded-md pointer-events-none block">
+                <span className="absolute inset-0 rounded-md bg-gradient-to-r from-cyan-400/20 to-purple-400/20 animate-pulse block" />
+              </span>
             )}
           </button>
         );
@@ -246,9 +253,9 @@ export function ThemeSwitcher({
       )}
 
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
-          <div className="animate-spin h-4 w-4 border-2 border-cyan-400 border-t-transparent rounded-full" />
-        </div>
+        <span className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
+          <span className="animate-spin h-4 w-4 border-2 border-cyan-400 border-t-transparent rounded-full inline-block" />
+        </span>
       )}
     </div>
   );

@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
 const StandardMapVisualization: React.FC = () => {
-  const [K, setK] = useState(1.0);
-  const [p0, setP0] = useState(0);
-  const [theta0, setTheta0] = useState(0);
+  const [K, setK] = useState(1.2);
+  const [p0, setP0] = useState(1.0);
+  const [theta0, setTheta0] = useState(0.5);
   const [iterations, setIterations] = useState(1000);
   const svgRef = useRef<SVGSVGElement>(null);
   
@@ -174,12 +174,11 @@ const StandardMapVisualization: React.FC = () => {
       
       {/* Visualization */}
       <div className="visualization-wrapper flex justify-center">
-        <svg 
-          ref={svgRef} 
-          width={width} 
-          height={height} 
-          className="border rounded-lg"
-          style={{ borderColor: 'var(--border-primary)' }}
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${width} ${height}`}
+          className="w-full border rounded-lg"
+          style={{ borderColor: 'var(--border-primary)', maxWidth: width, aspectRatio: `${width}/${height}` }}
         />
       </div>
       

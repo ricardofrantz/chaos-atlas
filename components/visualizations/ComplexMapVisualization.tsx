@@ -90,8 +90,8 @@ const ComplexMapVisualization: React.FC = () => {
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x = ((event.clientX - rect.left) / rect.width) * width;
+    const y = ((event.clientY - rect.top) / rect.height) * height;
 
     // Convert pixel coordinates to complex plane coordinates
     let complexX, complexY;
@@ -133,8 +133,8 @@ const ComplexMapVisualization: React.FC = () => {
       if (!canvas) return;
 
       const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      const x = ((event.clientX - rect.left) / rect.width) * width;
+      const y = ((event.clientY - rect.top) / rect.height) * height;
 
       const location = mandelbrotLocations[selectedMandelbrotLocation];
       const range = 4 / (location.zoom * zoomLevel);
@@ -322,6 +322,7 @@ const ComplexMapVisualization: React.FC = () => {
               width={width}
               height={height}
               className="border border-cyan-500/20 rounded-lg bg-black cursor-crosshair"
+              style={{ width: '100%', maxWidth: width, height: 'auto', aspectRatio: `${width}/${height}` }}
               onMouseMove={handleCanvasMouseMove}
               onMouseLeave={() => setHoveredPoint(null)}
               onClick={handleCanvasClick}

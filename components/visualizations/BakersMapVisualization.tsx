@@ -316,13 +316,13 @@ const BakersMapVisualization: React.FC = () => {
 
   const getVisualizationTitle = () => {
     switch (visualizationType) {
-      case 'trajectory': return 'Baker&apos;s Map Trajectory';
+      case 'trajectory': return "Baker's Map Trajectory";
       case 'mixing': return 'Mixing Behavior';
       case 'scrambling': return 'Image Scrambling';
       case 'invariant': return 'Invariant Measure';
       case 'partition': return 'Phase Space Partition';
       case 'symbolic': return 'Symbolic Dynamics';
-      default: return 'Baker&apos;s Map Visualization';
+      default: return "Baker's Map Visualization";
     }
   };
 
@@ -455,9 +455,9 @@ const BakersMapVisualization: React.FC = () => {
         <div className="flex justify-center">
           <svg
             ref={svgRef}
-            width={width}
-            height={height}
-            className="border border-cyan-500/20 rounded-lg bg-black/50"
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full border border-cyan-500/20 rounded-lg bg-black/50"
+            style={{ maxWidth: width, aspectRatio: `${width}/${height}` }}
           />
         </div>
       </div>

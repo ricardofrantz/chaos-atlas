@@ -640,9 +640,9 @@ const TinkerbellMapVisualization: React.FC = () => {
         <div className="flex justify-center">
           <svg
             ref={svgRef}
-            width={width}
-            height={height}
-            className="border border-cyan-500/20 rounded-lg bg-black/50"
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full border border-cyan-500/20 rounded-lg bg-black/50"
+            style={{ maxWidth: width, aspectRatio: `${width}/${height}` }}
           />
         </div>
       </div>

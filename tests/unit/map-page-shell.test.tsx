@@ -1,6 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
+jest.mock('@/components/themes', () => ({
+  ThemeSwitcher: () => <div data-testid="theme-switcher">Theme Switcher</div>,
+  NeonButton: ({ children, ...props }: { children: React.ReactNode } & Record<string, unknown>) => <button {...props}>{children}</button>,
+}));
+
 import MapPageLayout from '@/components/ui/MapPageLayout';
 import LogisticMapPage from '@/app/maps/logistic/page';
 import HenonMapPage from '@/app/maps/henon/page';

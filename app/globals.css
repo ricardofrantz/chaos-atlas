@@ -41,6 +41,12 @@
   --btn-outline-border: #a2d2ff;
   --btn-outline-hover: rgba(162, 210, 255, 0.2);
   --btn-outline-text: #a2d2ff;
+
+  /* Accent colors used by D3 visualizations — bridged from theme in theme-utils.ts */
+  --accent-cyan: #00ffff;
+  --accent-orange: #ff7f00;
+  --accent-magenta: #ff00ff;
+  --accent-red: #ff4444;
 }
 
 body {

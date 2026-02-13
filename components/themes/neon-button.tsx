@@ -180,8 +180,8 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
       >
         {/* Background glow effect */}
         {finalGlowIntensity > 0 && !disabled && (
-          <div
-            className="absolute inset-0 rounded-md opacity-30 blur-md -z-10"
+          <span
+            className="absolute inset-0 rounded-md opacity-30 blur-md -z-10 block"
             style={{
               background: `radial-gradient(circle, ${variantColors.glow}40 0%, transparent 70%)`,
               transform: isHovered ? 'scale(1.1)' : 'scale(1)',
@@ -192,8 +192,8 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
 
         {/* Animated border effect */}
         {isHovered && !disabled && (
-          <div
-            className="absolute inset-0 rounded-md opacity-60"
+          <span
+            className="absolute inset-0 rounded-md opacity-60 block"
             style={{
               background: `linear-gradient(45deg, transparent, ${variantColors.glow}60, transparent)`,
               backgroundSize: '200% 200%',
@@ -204,14 +204,14 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
 
         {/* Loading spinner */}
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
-            <div
-              className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"
+          <span className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md">
+            <span
+              className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full inline-block"
               style={{
                 borderTopColor: variantColors.text,
               }}
             />
-          </div>
+          </span>
         )}
 
         {/* Button content */}
@@ -231,8 +231,8 @@ const NeonButton = forwardRef<HTMLButtonElement, NeonButtonProps>(
 
         {/* Press ripple effect */}
         {isPressed && (
-          <div
-            className="absolute inset-0 rounded-md bg-white/20 animate-ping"
+          <span
+            className="absolute inset-0 rounded-md bg-white/20 animate-ping block"
             style={{ animationDuration: '0.3s' }}
           />
         )}

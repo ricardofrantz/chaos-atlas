@@ -38,23 +38,45 @@ const getPointCoordinate = (
   return getSafeValue(point[axis]);
 };
 
+const getDataRange = (data: ComparativeMapSeries, accessor: (p: ComparisonPoint) => number): [number, number] => {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const point of data) {
+    const v = accessor(point);
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  const pad = (max - min) * 0.05 || 0.5;
+  return [min - pad, max + pad];
+};
+
 const buildTimeSeriesPath = (data: ComparativeMapSeries): string => {
-  const widthFactor = data.length > 0 ? 100 / data.length : 0;
+  if (data.length === 0) return '';
+  const [yMin, yMax] = getDataRange(data, getPointScalar);
+  const ySpan = yMax - yMin || 1;
   return data
     .map((point, i) => {
       const value = getPointScalar(point);
-      const clampedValue = Math.max(-2, Math.min(2, value));
-      return `${i * widthFactor},${256 - clampedValue * 100}`;
+      const x = (i / data.length) * 100;
+      const y = 100 - ((value - yMin) / ySpan) * 100;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
     })
     .join(' L ');
 };
 
 const buildPhaseSpacePath = (data: ComparativeMapSeries): string => {
+  if (data.length === 0) return '';
+  const [xMin, xMax] = getDataRange(data, (p) => getPointCoordinate(p, 'x', 0));
+  const [yMin, yMax] = getDataRange(data, (p) => getPointCoordinate(p, 'y', 0));
+  const xSpan = xMax - xMin || 1;
+  const ySpan = yMax - yMin || 1;
   return data
     .map((point) => {
-      const safeX = Math.max(-2, Math.min(2, getPointCoordinate(point, 'x', 0)));
-      const safeY = Math.max(-2, Math.min(2, getPointCoordinate(point, 'y', 0)));
-      return `${(safeX + 2) * 100},${(safeY + 2) * 100}`;
+      const px = getPointCoordinate(point, 'x', 0);
+      const py = getPointCoordinate(point, 'y', 0);
+      const x = ((px - xMin) / xSpan) * 100;
+      const y = 100 - ((py - yMin) / ySpan) * 100;
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
     })
     .join(' L ');
 };
@@ -84,14 +106,15 @@ const renderTimeSeriesCard = (
     <div key={map?.id || mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
       <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name || mapId}</h3>
       <div className="h-64">
-        <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" className="border border-cyan-500/10 rounded bg-black/80">
           {data.length > 0 && (
             <g>
               <path
                 d={`M ${buildTimeSeriesPath(data)}`}
                 fill="none"
-                stroke="#00ffff"
+                stroke="var(--accent-cyan, #00ffff)"
                 strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
               />
             </g>
           )}
@@ -119,15 +142,16 @@ const renderPhaseSpaceCard = (
     <div key={map?.id || mapId} className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
       <h3 className="text-lg font-bold mb-3 neon-text-cyan">{map?.name || mapId}</h3>
       <div className="h-64">
-        <svg width="100%" height="100%" className="border border-cyan-500/10 rounded">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" className="border border-cyan-500/10 rounded bg-black/80">
           {data.length > 0 && (
             <g>
               <path
                 d={`M ${buildPhaseSpacePath(data)}`}
                 fill="none"
-                stroke="#00ffff"
+                stroke="var(--accent-cyan, #00ffff)"
                 strokeWidth="0.5"
                 opacity="0.8"
+                vectorEffect="non-scaling-stroke"
               />
             </g>
           )}

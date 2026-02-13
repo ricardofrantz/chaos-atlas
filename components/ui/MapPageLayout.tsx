@@ -1,16 +1,19 @@
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
+import { ThemeSwitcher } from '@/components/themes';
 
 interface MapPageLayoutProps {
   title: string;
   description: string;
   children: ReactNode;
+  showThemeSwitcher?: boolean;
 }
 
 export default function MapPageLayout({
   title,
   description,
-  children
+  children,
+  showThemeSwitcher = true
 }: MapPageLayoutProps): React.ReactElement {
   return (
     <div className="min-h-screen" style={{
@@ -20,16 +23,23 @@ export default function MapPageLayout({
         borderColor: 'var(--border-primary)',
         backgroundColor: 'var(--bg-header)'
       }}>
-        <div className="container mx-auto">
-          <Link href="/" className="text-sm mb-2 inline-block" style={{ color: 'var(--text-secondary)' }}>
-            ← Back to Home
-          </Link>
-          <h1 className="text-3xl font-bold" style={{ color: 'var(--text-accent)' }}>
-            {title}
-          </h1>
-          <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
-            {description}
-          </p>
+        <div className="container mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex-1">
+            <Link href="/" className="text-sm mb-2 inline-block" style={{ color: 'var(--text-secondary)' }}>
+              ← Back to Home
+            </Link>
+            <h1 className="text-3xl font-bold" style={{ color: 'var(--text-accent)' }}>
+              {title}
+            </h1>
+            <p className="mt-2" style={{ color: 'var(--text-secondary)' }}>
+              {description}
+            </p>
+          </div>
+          {showThemeSwitcher && (
+            <div className="flex items-center gap-4">
+              <ThemeSwitcher />
+            </div>
+          )}
         </div>
       </header>
       <main className="container mx-auto p-6">

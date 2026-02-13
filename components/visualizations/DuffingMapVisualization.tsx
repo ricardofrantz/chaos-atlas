@@ -15,7 +15,7 @@ import {
 } from '@/lib/maps/duffing';
 
 const DuffingMapVisualization: React.FC = () => {
-  const [selectedParams, setSelectedParams] = useState(0);
+  const [selectedParams, setSelectedParams] = useState(1);
   const [iterations, setIterations] = useState(2000);
   const [visualizationType, setVisualizationType] = useState('attractor');
   const [bifurcationParam, setBifurcationParam] = useState<'a' | 'b'>('a');
@@ -666,9 +666,9 @@ const DuffingMapVisualization: React.FC = () => {
         <div className="flex justify-center">
           <svg
             ref={svgRef}
-            width={width}
-            height={height}
-            className="border border-cyan-500/20 rounded-lg bg-black/50"
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full border border-cyan-500/20 rounded-lg bg-black/50"
+            style={{ maxWidth: width, aspectRatio: `${width}/${height}` }}
           />
         </div>
       </div>

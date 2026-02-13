@@ -443,9 +443,9 @@ const LogisticMapVisualization: React.FC = () => {
                 <div className="border border-cyan-500/20 rounded">
                   <svg
                     ref={svgRef}
-                    width={width * zoomLevel}
-                    height={height * zoomLevel}
-                    style={{ overflow: 'visible' }}
+                    viewBox={`0 0 ${width} ${height}`}
+                    className="w-full"
+                    style={{ maxWidth: width * zoomLevel, aspectRatio: `${width}/${height}` }}
                   />
                 </div>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import * as d3 from 'd3';
 import {
   calculateIkedaMap,
@@ -27,7 +27,7 @@ const IkedaMapVisualization: React.FC = () => {
   const width = 600;
   const height = 400;
 
-  const parameters = getInterestingIkedaParameters();
+  const parameters = useMemo(() => getInterestingIkedaParameters(), []);
   const currentParams = parameters[selectedParams];
 
   // Animation control
@@ -53,7 +53,7 @@ const IkedaMapVisualization: React.FC = () => {
   useEffect(() => {
     const le = calculateIkedaLyapunovExponents(currentParams.params, 2000);
     setLyapunovExponents(le);
-  }, [currentParams]);
+  }, [selectedParams]);
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -150,7 +150,7 @@ const IkedaMapVisualization: React.FC = () => {
       .style('font-weight', 'bold')
       .text(getVisualizationTitle());
 
-  }, [currentParams, iterations, visualizationType, bifurcationParam, animationStep]);
+  }, [selectedParams, iterations, visualizationType, bifurcationParam, animationStep]);
 
   const renderAttractor = (g: d3.Selection<SVGGElement, unknown, null, undefined>,
                           innerWidth: number, innerHeight: number) => {
@@ -545,9 +545,9 @@ const IkedaMapVisualization: React.FC = () => {
         <div className="flex justify-center">
           <svg
             ref={svgRef}
-            width={width}
-            height={height}
-            className="border border-cyan-500/20 rounded-lg bg-black/50"
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full border border-cyan-500/20 rounded-lg bg-black/50"
+            style={{ maxWidth: width, aspectRatio: `${width}/${height}` }}
           />
         </div>
       </div>

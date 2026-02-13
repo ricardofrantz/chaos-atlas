@@ -6,7 +6,7 @@ import { NeonButton, ThemeSwitcher } from '@/components/themes';
 
 export default function GlobalCMLPage() {
   return (
-    <div className="min-h-screen" data-theme="tron-dark">
+    <div className="min-h-screen">
       <header className="p-6 border-b border-cyan-500/20 bg-black/50 backdrop-blur-sm">
         <div className="container mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex-1">

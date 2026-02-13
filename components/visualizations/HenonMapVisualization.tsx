@@ -199,12 +199,11 @@ const HenonMapVisualization: React.FC = () => {
       
       {/* Visualization */}
       <div className="visualization-wrapper flex justify-center">
-        <svg 
-          ref={svgRef} 
-          width={width} 
-          height={height} 
-          className="border rounded-lg"
-          style={{ borderColor: 'var(--border-primary)' }}
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${width} ${height}`}
+          className="w-full border rounded-lg"
+          style={{ borderColor: 'var(--border-primary)', maxWidth: width, aspectRatio: `${width}/${height}` }}
         />
       </div>
       
