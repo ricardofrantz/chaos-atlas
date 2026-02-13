@@ -1,112 +1,116 @@
 # CML Visualizer
 
-A visual and futuristic web application for exploring coupled map lattices (CML) and iterative maps. This application allows users to visualize and interact with various chaotic systems through an intuitive interface with multiple theme options.
+Interactive web application for exploring chaotic dynamical systems. Visualize strange attractors, bifurcation diagrams, cobweb plots, Lyapunov exponents, and spatiotemporal patterns across 10 iterated maps and coupled map lattices.
 
-## Features
+**Live demo:** [ricardofrantz.github.io/cml-visualizer](https://ricardofrantz.github.io/cml-visualizer/)
 
-- **Multiple Map Types**:
-  - Logistic Map - The simplest chaotic system
-  - Hénon Map - A classic 2D chaotic map
-  - Standard Map - For exploring Hamiltonian chaos
-  - Coupled Map Lattice - With different coupling patterns (diffusive, global, directional)
+## Maps
 
-- **Visualization Options**:
-  - Time series plots
-  - Phase space visualizations
-  - Cobweb plots for 1D maps
-  - Bifurcation diagrams
-  - Heat maps and space-time plots for CML
+### 1D Maps
+| Map | Key Features |
+|-----|-------------|
+| **Logistic** | Bifurcation diagram, cobweb plot, period doubling |
+| **Tent** | Cobweb plot, symbolic dynamics, exact solutions |
 
-- **Interactive Features**:
-  - Real-time parameter adjustment with sliders
-  - Visualization type selection
-  - Preset configurations for interesting behaviors
-  - Animation controls
+### 2D Maps
+| Map | Key Features |
+|-----|-------------|
+| **Henon** | Strange attractor, phase space, basins of attraction |
+| **Standard (Chirikov)** | KAM islands, Hamiltonian chaos, mixed phase space |
+| **Ikeda** | Spiral attractor, laser cavity dynamics, Lyapunov exponents |
+| **Arnold Cat** | Area-preserving map, image scrambling |
+| **Baker's** | Mixing, symbolic dynamics, invariant measure |
+| **Tinkerbell** | Multi-loop attractor, fixed points, bistability |
+| **Duffing** | Double-well oscillator, phase portraits |
+| **Complex Quadratic** | Julia sets, Mandelbrot set, fractal zoom |
 
-- **Theming System**:
-  - Dune - Desert-inspired colors from the Dune universe
-  - Tron - Neon blue/cyan on dark from the Tron universe
-  - Matrix - Green code on black from The Matrix
-  - Scientific - Clean, publication-ready style
-  - Ice Fire - Blue and red gradient theme
+### Coupled Map Lattices
+| Type | Key Features |
+|------|-------------|
+| **Diffusive CML** | Space-time plots, pattern formation, synchronization |
+| **Global CML** | Mean-field coupling *(coming soon)* |
+
+### Comparative Analysis
+Side-by-side comparison of any maps with synchronized parameters, time series and phase space views.
+
+## Visualization Types
+
+- **Attractors & phase space** — D3.js scatter/path plots with color-coded iteration order
+- **Cobweb plots** — iterative mapping on the diagonal
+- **Bifurcation diagrams** — parameter sweeps revealing period-doubling cascades
+- **Time series** — temporal evolution of state variables
+- **Lyapunov exponents** — quantitative chaos measure displayed per parameter set
+- **Power spectra & return maps** — frequency and recurrence analysis
+- **Space-time heatmaps** — CML spatiotemporal evolution
+- **Fractal rendering** — pixel-level canvas computation for Julia/Mandelbrot sets
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm or pnpm
+- Node.js 18+
+- npm
 
-### Installation
+### Install and Run
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/cml-visualizer.git
+git clone https://github.com/ricardofrantz/cml-visualizer.git
 cd cml-visualizer
-```
-
-2. Install dependencies:
-```bash
 npm install
-# or
-pnpm install
-```
-
-3. Start the development server:
-```bash
 npm run dev
-# or
-pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+Open [http://localhost:3000](http://localhost:3000).
 
-## macOS Compatibility
+### Build for Production
 
-This application is designed to work seamlessly on macOS with specific optimizations:
-- Font rendering adjustments for macOS
-- Trackpad and mouse wheel behavior optimization
-- Responsive design for various screen sizes
-- Touch-friendly controls
+```bash
+npm run build    # Static export to out/
+```
+
+Deploys automatically to GitHub Pages on push to `main`.
+
+## Themes
+
+Three themes with persistent selection (stored in localStorage):
+
+- **Black & White** — high-contrast monochrome
+- **Neon Vintage** — warm retro neon palette
+- **Blue Tron** — cyan/blue on dark (default)
+
+Theme colors propagate to D3 visualizations through CSS custom properties.
 
 ## Project Structure
 
 ```
-cml-visualizer/
-├── app/                 # Next.js app router pages
-│   ├── maps/            # Individual map pages
-│   ├── cml/             # CML pages (diffusive, global)
-│   └── compare/         # Comparative analysis
-├── components/
-│   ├── themes/          # Theme provider, switcher, neon button
-│   ├── ui/              # Shared layout components
-│   └── visualizations/  # D3/Canvas visualization components
-├── lib/
-│   ├── maps/            # Map calculation functions
-│   └── themes/          # Theme types and utilities
-├── public/              # Static assets
-└── tests/               # Unit, integration, and e2e tests
+app/                     # Next.js App Router pages
+  maps/                  # Individual map pages (logistic, henon, ikeda, ...)
+  cml/                   # Coupled map lattice pages
+  compare/               # Side-by-side comparison
+components/
+  visualizations/        # D3/Canvas rendering (one per map)
+  themes/                # ThemeProvider, ThemeSwitcher, NeonButton
+  ui/                    # MapPageLayout (shared header + nav)
+lib/
+  maps/                  # Pure calculation functions (no React)
+  themes/                # Theme config, CSS variable bridge
+tests/                   # 184 tests (unit, integration, a11y, e2e)
 ```
 
-## Development
+## Adding a New Map
 
-### Adding a New Theme
+1. Create the calculation module in `lib/maps/yourmap.ts`
+2. Create the visualization component in `components/visualizations/YourMapVisualization.tsx`
+3. Add a page at `app/maps/yourmap/page.tsx` using `MapPageLayout`
+4. Add a card to the home page in `app/page.tsx`
 
-1. Add your theme to `src/themes/theme-variants.ts` following the existing pattern
-2. The theme will automatically appear in the theme switcher
+## Tech Stack
 
-### Adding a New Map Type
-
-1. Create a new calculation file in `src/lib/maps/`
-2. Create a new visualization component in `src/components/visualizations/`
-3. Add a new page in `src/app/maps/` or `src/app/cml/`
-4. Update the home page to include a link to your new map
+- **Framework:** Next.js 14 (static export)
+- **Rendering:** D3.js (SVG) + Canvas (fractals)
+- **Styling:** Tailwind CSS + CSS custom properties
+- **Deployment:** GitHub Pages via Actions
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Inspired by research in chaos theory and nonlinear dynamics
-- Built with Next.js, React, D3.js, and Tailwind CSS
+MIT
