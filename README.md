@@ -4,6 +4,8 @@ Interactive web application for exploring chaotic dynamical systems. Visualize s
 
 **Live demo:** [ricardofrantz.github.io/chaos-atlas](https://ricardofrantz.github.io/chaos-atlas/)
 
+**Topics:** `#chaos` `#chaotic-systems` `#dynamical-systems` `#strange-attractors` `#bifurcation` `#coupled-map-lattices` `#lyapunov-exponents` `#d3js` `#nextjs` `#data-visualization` `#react`
+
 ## Maps
 
 ### 1D Maps
