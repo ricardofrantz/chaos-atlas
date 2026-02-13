@@ -73,19 +73,19 @@ This application is designed to work seamlessly on macOS with specific optimizat
 
 ```
 cml-visualizer/
+├── app/                 # Next.js app router pages
+│   ├── maps/            # Individual map pages
+│   ├── cml/             # CML pages (diffusive, global)
+│   └── compare/         # Comparative analysis
+├── components/
+│   ├── themes/          # Theme provider, switcher, neon button
+│   ├── ui/              # Shared layout components
+│   └── visualizations/  # D3/Canvas visualization components
+├── lib/
+│   ├── maps/            # Map calculation functions
+│   └── themes/          # Theme types and utilities
 ├── public/              # Static assets
-├── src/
-│   ├── app/             # Next.js app router pages
-│   ├── components/      # React components
-│   │   ├── layout/      # Layout components
-│   │   ├── ui/          # UI components
-│   │   └── visualizations/ # Visualization components
-│   ├── lib/             # Utility functions
-│   │   └── maps/        # Map calculation functions
-│   └── themes/          # Theming system
-├── LLM.txt              # Information about Language Models
-├── README.md            # Project documentation
-└── package.json         # Project dependencies
+└── tests/               # Unit, integration, and e2e tests
 ```
 
 ## Development

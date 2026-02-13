@@ -38,5 +38,16 @@ next-env.d.ts
 .vscode/
 .idea/
 
+# AI/LLM tooling
+.claude/
+.specify/
+agents.md
+CLAUDE.md
+TODO.md
+plan_*.md
+
+# Test reports
+playwright-report/
+
 # OS generated files
 Thumbs.db
